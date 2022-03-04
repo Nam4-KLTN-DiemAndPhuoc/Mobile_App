@@ -10,15 +10,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 export default function Background({ children }) {
   return (
-    <ImageBackground
-      source={require("../assets/background_dot.png")}
-      resizeMode="repeat"
-      style={styles.background}
-    >
+    <View style={styles.background}>
       <KeyboardAwareScrollView>
         <View style={styles.container}>{children}</View>
       </KeyboardAwareScrollView>
-    </ImageBackground>
+    </View>
   );
 }
 

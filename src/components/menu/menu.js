@@ -49,36 +49,11 @@ const MainTab = () => {
     >
       <Tab.Screen
         options={{
+          headerShown: false,
           title: "Tin nhắn",
           tabBarIcon: ({ color: color }) => {
             return <Ionicons name="chatbubble" size={iconSize} color={color} />;
           },
-          // headerLeft: () => {
-          //   return (
-          //     <TouchableHighlight
-          //       underlayColor={" #cccccc"}
-          //       onPress={() => {
-          //         navigation.navigate("ProfileUserScreen");
-          //       }}
-          //     >
-          //       <Image
-          //         source={{
-          //           uri: "" + profilePicture,
-          //         }}
-          //         style={{
-          //           width: responsiveHeight(4.5),
-          //           height: responsiveHeight(4.5),
-          //           borderRadius: responsiveHeight(5),
-          //           borderColor: "#ccc",
-          //           borderWidth: 1,
-          //         }}
-          //       />
-          //     </TouchableHighlight>
-          //   );
-          // },
-          // headerLeftContainerStyle: {
-          //   marginLeft: responsiveHeight(2),
-          // },
         }}
         name="Dashboard"
         component={Dashboard}

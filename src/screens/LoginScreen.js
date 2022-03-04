@@ -10,12 +10,17 @@ import BackButton from "../components/BackButton";
 import { theme } from "../core/theme";
 import { emailValidator } from "../helpers/emailValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
-  const onLoginPressed = () => {
+  const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
     if (emailError || passwordError) {
@@ -23,12 +28,18 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError });
       return;
     }
+    const data = {
+      email: email.value,
+      password: password.value,
+    };
+    const res = await dispatch(login(data));
+
     navigation.navigate("Dashboard");
   };
 
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
+      <View style={styles.body}></View>
       <Logo />
 
       <TextInput
@@ -44,7 +55,7 @@ export default function LoginScreen({ navigation }) {
         keyboardType="email-address"
       />
       <TextInput
-        label="Password"
+        label="Mật khẩu"
         returnKeyType="done"
         value={password.value}
         onChangeText={(text) => setPassword({ value: text, error: "" })}
@@ -56,16 +67,16 @@ export default function LoginScreen({ navigation }) {
         <TouchableOpacity
           onPress={() => navigation.navigate("ResetPasswordScreen")}
         >
-          <Text style={styles.forgot}>Forgot your password?</Text>
+          <Text style={styles.forgot}>Quên mật khẩu ?</Text>
         </TouchableOpacity>
       </View>
       <Button mode="contained" onPress={onLoginPressed}>
-        Login
+        Đăng nhập
       </Button>
       <View style={styles.row}>
-        <Text>Don’t have an account? </Text>
+        <Text>Chưa có tài khoản ? </Text>
         <TouchableOpacity onPress={() => navigation.replace("RegisterScreen")}>
-          <Text style={styles.link}>Sign up</Text>
+          <Text style={styles.link}> Đăng ký</Text>
         </TouchableOpacity>
       </View>
     </Background>
@@ -73,6 +84,9 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  body: {
+    marginTop: 100,
+  },
   forgotPassword: {
     width: "100%",
     alignItems: "flex-end",
@@ -80,7 +94,6 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    marginTop: 4,
   },
   forgot: {
     fontSize: 13,
