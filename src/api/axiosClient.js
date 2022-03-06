@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const REACT_APP_API_URL = "http://192.168.1.5:9191/api/";
+const REACT_APP_API_URL = "http://192.168.1.14:9191/api/";
 
 const axiosClient = axios.create({
   baseURL: REACT_APP_API_URL,

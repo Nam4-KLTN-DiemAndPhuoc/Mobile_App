@@ -10,10 +10,12 @@ import {
   RegisterScreen,
   ResetPasswordScreen,
   Dashboard,
+  ConfirmOTP,
 } from "./screens";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, refreshToken } from "./redux/authSlice";
+import { UserScreen } from "./screens";
 
 const Stack = createStackNavigator();
 const Root = () => {
@@ -28,79 +30,61 @@ const Root = () => {
     <RootSiblingParent>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          {token ? (
-            <Stack.Navigator initialRouteName="menu">
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="menu"
-                component={menu}
-              />
+          <Stack.Navigator initialRouteName="menu">
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="menu"
+              component={menu}
+            />
 
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="RegisterScreen"
-                component={RegisterScreen}
-              />
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="LoginScreen"
-                component={LoginScreen}
-              />
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="Dashboard"
-                component={Dashboard}
-              />
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="RegisterScreen"
+              component={RegisterScreen}
+            />
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="LoginScreen"
+              component={LoginScreen}
+            />
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="Dashboard"
+              component={Dashboard}
+            />
 
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="ResetPasswordScreen"
-                component={ResetPasswordScreen}
-              />
-            </Stack.Navigator>
-          ) : (
-            <Stack.Navigator initialRouteName="menu">
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="menu"
-                component={LoginScreen}
-              />
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="UserScreen"
+              component={UserScreen}
+            />
 
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="RegisterScreen"
-                component={RegisterScreen}
-              />
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="LoginScreen"
-                component={LoginScreen}
-              />
-              <Stack.Screen
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-                name="ResetPasswordScreen"
-                component={ResetPasswordScreen}
-              />
-            </Stack.Navigator>
-          )}
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="ResetPasswordScreen"
+              component={ResetPasswordScreen}
+            />
+
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="ConfirmOTP"
+              component={ConfirmOTP}
+            />
+          </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
     </RootSiblingParent>

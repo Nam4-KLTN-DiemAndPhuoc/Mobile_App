@@ -3,3 +3,8 @@ export { default as RegisterScreen } from "./RegisterScreen";
 export { default as ResetPasswordScreen } from "./ResetPasswordScreen";
 export { default as Dashboard } from "./Dashboard";
 export { default as menu } from "../components/menu/menu";
+export { default as ConfirmOTP } from "./ConfirmOTP";
+export { default as UserScreen } from "./User/UserScreen";
+export { default as OrderHistoryScreen } from "./Order/OrderHistoryScreen";
+export { default as CartScreen } from "./Cart/CartScreen";
+export { default as SearchScreen } from "./Search/SearchScreen";

@@ -13,5 +13,13 @@ const athApi = {
     const url = `user-service/auth/refreshToken`;
     return axiosClient.post(url);
   },
+  sendOTP: (data) => {
+    const url = `user-service/auth/generateOTP`;
+    return axiosClient.post(url, data);
+  },
+  validateOTP: (data) => {
+    const url = `user-service/auth/validateOTP`;
+    return axiosClient.post(url, data);
+  },
 };
 export default athApi;

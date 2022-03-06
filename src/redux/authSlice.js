@@ -24,6 +24,7 @@ export const register = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await authApi.regiter(params);
+      console.log(res);
       await AsyncStorage.setItem("token", res.token);
       return res;
     } catch (error) {
@@ -44,6 +45,15 @@ export const refreshToken = createAsyncThunk(
     }
   }
 );
+
+export const sendOTP = createAsyncThunk("sendOTP", async (params, thunkAPI) => {
+  try {
+    const res = await authApi.sendOTP(params);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const authSlice = createSlice({
   name: "auth",

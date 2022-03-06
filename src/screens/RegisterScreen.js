@@ -2,35 +2,90 @@ import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
 import Background from "../components/Background";
-import Logo from "../components/Logo";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
 import BackButton from "../components/BackButton";
 import { theme } from "../core/theme";
-import { emailValidator } from "../helpers/emailValidator";
-import { passwordValidator } from "../helpers/passwordValidator";
+import { emailValidator, phoneValidator } from "../helpers/emailValidator";
+import {
+  passwordValidator,
+  password_CrfValidator,
+} from "../helpers/passwordValidator";
 import { nameValidator } from "../helpers/nameValidator";
+import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
+import { useDispatch } from "react-redux";
+import { sendOTP } from "../redux/authSlice";
+
+const radioButtonsData = [
+  {
+    id: "1",
+    label: "Nam",
+    value: 1,
+    selected: true,
+  },
+  {
+    id: "2",
+    label: "Nữ",
+    value: 0,
+    elected: false,
+  },
+];
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: "", error: "" });
+  const [phoneNumber, setPhoneNumber] = useState({ value: "", error: "" });
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
+  const [password_Cfr, setPassword_Cfr] = useState({ value: "", error: "" });
+  const [radioButtons, setRadioButtons] = useState(radioButtonsData);
+  const [gender, setGender] = useState(1);
+  const dispatch = useDispatch();
+
+  const onPressRadioButton = (radioButtonsArray) => {
+    setRadioButtons(radioButtonsArray);
+    radioButtonsArray.map((value) => {
+      if (value.selected) setGender(value.value);
+    });
+  };
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
-    if (emailError || passwordError || nameError) {
+    const password_CfrError = password_CrfValidator(
+      password_Cfr.value,
+      password.value
+    );
+    const phoneNumberError = phoneValidator(phoneNumber.value);
+    if (
+      emailError ||
+      passwordError ||
+      nameError ||
+      password_CfrError ||
+      phoneNumberError
+    ) {
       setName({ ...name, error: nameError });
       setEmail({ ...email, error: emailError });
       setPassword({ ...password, error: passwordError });
+      setPassword_Cfr({ ...password_Cfr, error: password_CfrError });
+      setPhoneNumber({ ...phoneNumber, error: phoneNumberError });
       return;
     }
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{ name: "Dashboard" }],
-    // });
+    const data = {
+      userName: name.value,
+      email: email.value,
+      phone: phoneNumber.value,
+      gender: gender.value,
+      password: password.value,
+    };
+    const otp = {
+      email: email.value,
+    };
+
+    dispatch(sendOTP(otp));
+
+    navigation.navigate("ConfirmOTP", { data });
   };
 
   return (
@@ -41,15 +96,20 @@ export default function RegisterScreen({ navigation }) {
         }}
       />
       <View style={styles.body}></View>
-      <Logo />
-      <Header>Create Account</Header>
+
+      <Header>ĐĂNG KÝ</Header>
       <TextInput
-        label="Name"
+        label="Tên tài khoản"
         returnKeyType="next"
         value={name.value}
         onChangeText={(text) => setName({ value: text, error: "" })}
         error={!!name.error}
         errorText={name.error}
+      />
+      <RadioGroup
+        radioButtons={radioButtons}
+        onPress={onPressRadioButton}
+        layout="row"
       />
       <TextInput
         label="Email"
@@ -63,8 +123,20 @@ export default function RegisterScreen({ navigation }) {
         textContentType="emailAddress"
         keyboardType="email-address"
       />
+
       <TextInput
-        label="Password"
+        label="Số điện thoại"
+        returnKeyType="next"
+        value={phoneNumber.value}
+        onChangeText={(text) => {
+          setPhoneNumber({ value: text, error: "" });
+        }}
+        error={!!phoneNumber.error}
+        errorText={phoneNumber.error}
+      />
+
+      <TextInput
+        label="Mật khẩu"
         returnKeyType="done"
         value={password.value}
         onChangeText={(text) => setPassword({ value: text, error: "" })}
@@ -72,17 +144,28 @@ export default function RegisterScreen({ navigation }) {
         errorText={password.error}
         secureTextEntry
       />
+
+      <TextInput
+        label="Xác nhận mật khẩu"
+        returnKeyType="done"
+        value={password_Cfr.value}
+        onChangeText={(text) => setPassword_Cfr({ value: text, error: "" })}
+        error={!!password_Cfr.error}
+        errorText={password_Cfr.error}
+        secureTextEntry
+      />
+
       <Button
         mode="contained"
         onPress={onSignUpPressed}
         style={{ marginTop: 24 }}
       >
-        Sign Up
+        Đăng ký
       </Button>
       <View style={styles.row}>
-        <Text>Already have an account? </Text>
+        <Text>Đã có tài khoản? </Text>
         <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
-          <Text style={styles.link}>Login</Text>
+          <Text style={styles.link}>Đăng nhập</Text>
         </TouchableOpacity>
       </View>
     </Background>
@@ -90,9 +173,7 @@ export default function RegisterScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  body: {
-    marginTop: 50,
-  },
+  body: {},
 
   row: {
     flexDirection: "row",

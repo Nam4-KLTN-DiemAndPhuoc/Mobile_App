@@ -3,16 +3,13 @@ import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
-import Header from "../components/Header";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-import BackButton from "../components/BackButton";
 import { theme } from "../core/theme";
 import { emailValidator } from "../helpers/emailValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();

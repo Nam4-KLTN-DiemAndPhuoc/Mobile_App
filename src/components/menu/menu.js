@@ -12,13 +12,14 @@ import {
   responsiveFontSize,
   responsiveHeight,
 } from "react-native-responsive-dimensions";
-import LoginScreen from "../../screens/LoginScreen";
-
-import RegisterScreen from "../../screens/RegisterScreen";
-
-import ResetPasswordScreen from "../../screens/ResetPasswordScreen";
 
 import Dashboard from "../../screens/Dashboard";
+import UserScreen from "../../screens/User/UserScreen";
+import SearchScreen from "../../screens/Search/SearchScreen";
+import OrderHistoryScreen from "../../screens/Order/OrderHistoryScreen";
+import CartScreen from "../../screens/Cart/CartScreen";
+import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 const MainTab = () => {
@@ -50,76 +51,56 @@ const MainTab = () => {
       <Tab.Screen
         options={{
           headerShown: false,
-          title: "Tin nhắn",
+          title: "Home",
           tabBarIcon: ({ color: color }) => {
-            return <Ionicons name="chatbubble" size={iconSize} color={color} />;
+            return <AntDesign name="home" size={iconSize} color={color} />;
           },
         }}
         name="Dashboard"
         component={Dashboard}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         options={{
-          title: "Liên hệ",
+          title: "Search",
           tabBarIcon: ({ color: color }) => (
-            <MaterialCommunityIcons
-              name="contacts"
-              size={iconSize}
-              color={color}
-            />
+            <Ionicons name="search" size={iconSize} color={color} />
           ),
         }}
-        name="RegisterScreen"
-        component={RegisterScreen}
+        name="SearchScreen"
+        component={SearchScreen}
+      />
+
+      <Tab.Screen
+        options={{
+          title: "Cart",
+          tabBarIcon: ({ color: color }) => (
+            <Ionicons name="ios-cart-outline" size={iconSize} color={color} />
+          ),
+        }}
+        name="CartScreen"
+        component={CartScreen}
       />
       <Tab.Screen
         options={{
-          title: `Nhóm`,
-          headerShown: true,
-          headerRight: () => {
-            return (
-              <TouchableHighlight
-                style={{ borderRadius: 1000, padding: 3 }}
-                underlayColor={theme.colors.secondary}
-                onPress={() => {
-                  navigation.navigate("LoginScreen");
-                }}
-              >
-                <MaterialIcons
-                  name="group-add"
-                  size={35}
-                  color={theme.colors.primary}
-                  style={{
-                    paddingRight: 10,
-                  }}
-                />
-              </TouchableHighlight>
-            );
-          },
-          headerRightContainerStyle: {
-            marginRight: 15,
-          },
+          title: "Order",
           tabBarIcon: ({ color: color }) => (
-            <MaterialCommunityIcons
-              name="account-group"
-              size={iconSize + 5}
-              color={color}
-            />
+            <MaterialIcons name="history" size={iconSize} color={color} />
           ),
         }}
-        name="ResetPasswordScreen"
-        component={ResetPasswordScreen}
+        name="OrderHistoryScreen"
+        component={OrderHistoryScreen}
       />
+
       <Tab.Screen
         options={{
-          title: "Thông tin",
+          title: "User",
           tabBarIcon: ({ color: color }) => (
-            <Ionicons name="md-grid" size={iconSize} color={color} />
+            <FontAwesome name="user-circle-o" size={iconSize} color={color} />
           ),
         }}
-        name="LoginScreen"
-        component={LoginScreen}
-      /> */}
+        name="UserScreen"
+        component={UserScreen}
+      />
     </Tab.Navigator>
   );
 };
