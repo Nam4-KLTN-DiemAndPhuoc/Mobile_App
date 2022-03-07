@@ -16,13 +16,14 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, refreshToken } from "./redux/authSlice";
 import { UserScreen } from "./screens";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator();
 const Root = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useEffect(async () => {
     dispatch(refreshToken());
   }, [dispatch]);
 
@@ -52,13 +53,6 @@ const Root = () => {
               })}
               name="LoginScreen"
               component={LoginScreen}
-            />
-            <Stack.Screen
-              options={({ navigation }) => ({
-                headerShown: false,
-              })}
-              name="Dashboard"
-              component={Dashboard}
             />
 
             <Stack.Screen

@@ -15,7 +15,8 @@ import {
 import { nameValidator } from "../helpers/nameValidator";
 import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
 import { useDispatch } from "react-redux";
-import { sendOTP } from "../redux/authSlice";
+import Toast from "react-native-root-toast";
+import authApi from "../api/authApi";
 
 const radioButtonsData = [
   {
@@ -49,7 +50,7 @@ export default function RegisterScreen({ navigation }) {
     });
   };
 
-  const onSignUpPressed = () => {
+  const onSignUpPressed = async () => {
     const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
@@ -82,10 +83,24 @@ export default function RegisterScreen({ navigation }) {
     const otp = {
       email: email.value,
     };
-
-    dispatch(sendOTP(otp));
-
-    navigation.navigate("ConfirmOTP", { data });
+    const res = await authApi.sendOTP(otp);
+    if (res == true) {
+      navigation.navigate("ConfirmOTP", { data });
+    } else {
+      Toast.show("Email đã được đăng kí", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        containerStyle: {
+          backgroundColor: "#C4C4C4",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
+        },
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
+    }
   };
 
   return (

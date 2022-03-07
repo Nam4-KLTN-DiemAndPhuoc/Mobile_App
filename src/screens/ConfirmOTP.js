@@ -10,16 +10,17 @@ import { StyleSheet, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { register, validateOTP } from "../redux/authSlice";
 import authApi from "../api/authApi";
+import Toast from "react-native-root-toast";
 
 export default function ConfirmOTP({ navigation, route }) {
   const dispatch = useDispatch();
 
   const [otp, setOTP] = useState({ value: "", error: "" });
 
-  const sendResetPasswordEmail = async () => {
+  const validator = async () => {
     const otpError = otpValidator(otp.value);
     if (otpError) {
-      setOTP({ ...opt, error: otpError });
+      setOTP({ ...otp, error: otpError });
       return;
     }
     const data = {
@@ -27,13 +28,24 @@ export default function ConfirmOTP({ navigation, route }) {
       email: route.params.data.email,
     };
     const res = await authApi.validateOTP(data);
-    if (res !== true) {
-      const error = "Mã xác nhận không chính xác";
-      setOTP({ ...opt, error: error });
-      return;
+    if (res == true) {
+      dispatch(register(route.params.data));
+      navigation.navigate("LoginScreen");
+    } else {
+      Toast.show("Mã xác thực không chính xác", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        containerStyle: {
+          backgroundColor: "#C4C4C4",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
+        },
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
     }
-    dispatch(register(route.params.data));
-    navigation.navigate("LoginScreen");
   };
 
   return (
@@ -52,11 +64,7 @@ export default function ConfirmOTP({ navigation, route }) {
         autoCapitalize="none"
         description="Nhập mã xác nhận được gửi qua mail đăng ký của bạn"
       />
-      <Button
-        mode="contained"
-        onPress={sendResetPasswordEmail}
-        style={{ marginTop: 16 }}
-      >
+      <Button mode="contained" onPress={validator} style={{ marginTop: 16 }}>
         Xác nhận
       </Button>
     </Background>

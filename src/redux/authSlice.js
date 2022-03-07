@@ -24,7 +24,6 @@ export const register = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await authApi.regiter(params);
-      console.log(res);
       await AsyncStorage.setItem("token", res.token);
       return res;
     } catch (error) {
@@ -46,10 +45,9 @@ export const refreshToken = createAsyncThunk(
   }
 );
 
-export const sendOTP = createAsyncThunk("sendOTP", async (params, thunkAPI) => {
+export const logout = createAsyncThunk("logout", async (params, thunkAPI) => {
   try {
-    const res = await authApi.sendOTP(params);
-    return res;
+    await AsyncStorage.removeItem("token");
   } catch (error) {
     console.log(error);
   }
@@ -58,19 +56,23 @@ export const sendOTP = createAsyncThunk("sendOTP", async (params, thunkAPI) => {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    // thay doi state
-    logout: async (state, action) => {
-      AsyncStorage.removeItem("token");
-    },
-  },
+
   extraReducers: {
+    // login
     [login.pending]: (state, action) => {},
     [login.fulfilled]: (state, action) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
     },
     [login.rejected]: (state, action) => {},
+
+    // logout
+    [logout.pending]: (state, action) => {},
+    [logout.fulfilled]: (state, action) => {
+      state.token = null;
+      state.user = null;
+    },
+    [logout.rejected]: (state, action) => {},
 
     // register
     [register.pending]: (state, action) => {},
@@ -94,6 +96,4 @@ const authSlice = createSlice({
   },
 });
 
-const { reducer, actions } = authSlice;
-export const { logout } = actions;
-export default reducer;
+export default authSlice.reducer;
