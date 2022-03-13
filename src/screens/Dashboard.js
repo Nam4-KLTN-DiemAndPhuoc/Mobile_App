@@ -1,50 +1,32 @@
 import React, { useEffect } from "react";
-import Background from "../components/Background";
-import Logo from "../components/Logo";
-import Header from "../components/Header";
-import Paragraph from "../components/Paragraph";
-import Button from "../components/Button";
 import { StyleSheet, View } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import HomeHeader from "../components/header/HomeHeader";
 import { ScrollView } from "react-native-gesture-handler";
-import NewProduct from "../components/newProduct/NewProduct";
 import ItemProduct from "../components/product/ItemProduct";
+import AdvertisementList from "../components/advertisement/AdvertisementList";
+import ListProductHome from "../components/product/ListProductHome";
 
 export default function Dashboard({ navigation }) {
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const id = 5;
-  //   dispatch(getUserId(id));
-  //   const data = {
-  //     userName: " phuoc",
-  //     addresses: null,
-  //     role: {
-  //       id: 1,
-  //       name: "ROLE_USER",
-  //     },
-  //     email: "duongdiemee@gmail.com",
-  //     phone: null,
-  //     gender: false,
-  //     createdAt: null,
-  //     deletedAt: null,
-  //     deletedBy: null,
-  //   };
-  //   dispatch(register(data));
-  // });
+  const { products } = useSelector((state) => state.productList);
 
   return (
-    <View>
+    <View style={{ backgroundColor: "#C4C4C4" }}>
       <HomeHeader />
-      <NewProduct />
-      <ItemProduct />
+      <ScrollView style={styles.body}>
+        <AdvertisementList />
+        <View>
+          <ListProductHome />
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  logo: {
-    paddingTop: 100,
+  body: {
+    height: "80%",
   },
 });

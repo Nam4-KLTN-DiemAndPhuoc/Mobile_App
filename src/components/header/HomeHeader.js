@@ -1,23 +1,21 @@
-import React, { useState } from "react";
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/core";
+import React, { useState } from "react";
+import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export default function HomeHeader() {
   const [itemSelected, setItemSelected] = useState("Tất cả");
 
+  const { suppliers } = useSelector((state) => state.suppliers);
+
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.textTitle}>SHOP TD</Text>
+        <Text style={styles.textTitle}>SHOP PD</Text>
       </View>
       <View style={styles.search}>
         <View style={styles.picker}>
@@ -26,13 +24,24 @@ export default function HomeHeader() {
             onValueChange={(itemValue, itemIndex) => {
               setItemSelected(itemValue);
             }}
-            itemStyle={styles.itemPicker}
           >
-            <Picker.Item label="Tất cả" value="Tất cả" />
-            <Picker.Item label="Shop 1" value="Shop 1" />
+            <Picker.Item label="Nhà cung cấp" value="Tất cả" />
+            {suppliers.map((item) => (
+              <Picker.Item
+                key={item.id}
+                label={item.supplierName}
+                value={item.id}
+              />
+            ))}
           </Picker>
         </View>
-        <TextInput style={styles.textInput} placeholder="Tìm kiếm" />
+        <TextInput
+          style={styles.textInput}
+          onFocus={() => {
+            navigation.navigate("SearchScreen");
+          }}
+          placeholder="Tìm kiếm"
+        />
       </View>
     </View>
   );
@@ -40,7 +49,7 @@ export default function HomeHeader() {
 
 const styles = StyleSheet.create({
   container: {
-    height: "25%",
+    height: "20%",
     backgroundColor: "#F08F5F",
   },
 
@@ -74,8 +83,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     marginBottom: 10,
-  },
-  itemPicker: {
-    // fontSize: 10,
   },
 });

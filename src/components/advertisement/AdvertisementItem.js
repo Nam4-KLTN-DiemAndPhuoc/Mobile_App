@@ -1,14 +1,20 @@
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 
-export default function NewProduct() {
+export default function AdvertisementItem({ item }) {
   return (
     <View>
       <ImageBackground
         source={{
-          uri: "http://aothunit.com/asset/images/products/x2/1580614718.9483_80090864_778657005935639_296725039779151872_o.jpg",
+          uri: item.product.avatar,
         }}
         style={styles.imageBackground}
       >
@@ -21,12 +27,13 @@ export default function NewProduct() {
               color="black"
             />
           </TouchableOpacity>
-          <View style={styles.productName}>
-            <Text style={styles.textProductName}>Áo khủng long bay</Text>
-          </View>
-          <View style={styles.price}>
-            <Text style={styles.textPrice}>100000 VNĐ</Text>
-          </View>
+        </View>
+        <View style={styles.background}>
+          <Text style={styles.textProductName}>{item.product.name}</Text>
+          <Text style={styles.textPrice}>
+            {item.product.price - item.product.price * item.product.discount}{" "}
+            VNĐ
+          </Text>
         </View>
       </ImageBackground>
     </View>
@@ -34,7 +41,7 @@ export default function NewProduct() {
 }
 const styles = StyleSheet.create({
   imageBackground: {
-    width: "100%",
+    width: Dimensions.get("window").width,
     height: 200,
   },
   container: {
@@ -54,26 +61,28 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  productName: {
-    marginTop: 20,
-    width: "60%",
-    borderRadius: 20,
-    alignItems: "center",
-  },
+
   textProductName: {
-    color: "white",
+    color: "red",
     padding: 5,
     fontSize: 18,
     fontWeight: "bold",
-  },
-  price: {
-    width: "60%",
+    backgroundColor: "#C4C4C4",
     borderRadius: 20,
-    alignItems: "center",
   },
+
   textPrice: {
-    color: "white",
+    color: "red",
     padding: 5,
     fontSize: 18,
+    backgroundColor: "#C4C4C4",
+    borderRadius: 20,
+    fontWeight: "bold",
+  },
+  background: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 60,
   },
 });

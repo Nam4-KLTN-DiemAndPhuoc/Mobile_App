@@ -25,15 +25,8 @@ const Tab = createBottomTabNavigator();
 const MainTab = () => {
   const theme = useTheme();
 
-  let profilePicture =
-    "https://sothis.es/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png";
-
-  const [myNofi, setMyNofi] = React.useState(0); //test so 3
-
   const iconSize = 23;
   const tabBarHeight = responsiveHeight(7);
-
-  const navigation = useNavigation();
 
   return (
     <Tab.Navigator
@@ -61,6 +54,7 @@ const MainTab = () => {
       />
       <Tab.Screen
         options={{
+          headerShown: false,
           title: "Search",
           tabBarIcon: ({ color: color }) => (
             <Ionicons name="search" size={iconSize} color={color} />

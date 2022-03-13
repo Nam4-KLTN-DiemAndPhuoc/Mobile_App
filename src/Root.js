@@ -17,6 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout, refreshToken } from "./redux/authSlice";
 import { UserScreen } from "./screens";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { advertisement } from "./redux/advertisementSlice";
+import { getAll } from "./redux/productListSlice";
+import { suppliers } from "./redux/supplierSlice";
 
 const Stack = createStackNavigator();
 const Root = () => {
@@ -25,6 +28,16 @@ const Root = () => {
 
   useEffect(async () => {
     dispatch(refreshToken());
+    dispatch(advertisement());
+
+    const paging = {
+      page: 1,
+      limit: 10,
+    };
+
+    dispatch(getAll(paging));
+
+    dispatch(suppliers());
   }, [dispatch]);
 
   return (

@@ -1,10 +1,25 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import SearchHeader from "../../components/header/SearchHeader";
+import SearchFilter from "../../components/search/SearchFilter";
 
 export default function SearchScreen() {
   return (
     <View>
-      <Text>Search</Text>
+      <View style={styles.header}>
+        <SearchHeader />
+      </View>
+      <View>
+        <SearchFilter />
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  header: { height: 100 },
+  filter: {
+    height: "15%",
+    backgroundColor: "#F08F5F",
+  },
+});
