@@ -9,7 +9,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function HomeHeader() {
   const [itemSelected, setItemSelected] = useState("Tất cả");
 
-  const { suppliers } = useSelector((state) => state.suppliers);
+  const { category } = useSelector((state) => state.category);
 
   const navigation = useNavigation();
   return (
@@ -25,13 +25,9 @@ export default function HomeHeader() {
               setItemSelected(itemValue);
             }}
           >
-            <Picker.Item label="Nhà cung cấp" value="Tất cả" />
-            {suppliers.map((item) => (
-              <Picker.Item
-                key={item.id}
-                label={item.supplierName}
-                value={item.id}
-              />
+            <Picker.Item label="Danh mục" value="Tất cả" />
+            {category.map((item) => (
+              <Picker.Item key={item.id} label={item.name} value={item.id} />
             ))}
           </Picker>
         </View>

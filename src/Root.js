@@ -2,24 +2,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import { Provider as PaperProvider } from "react-native-paper";
-
+import { RootSiblingParent } from "react-native-root-siblings";
+import { useDispatch, useSelector } from "react-redux";
 import menu from "./components/menu/menu";
 import { theme } from "./core/theme";
+import { advertisement } from "./redux/advertisementSlice";
+import { refreshToken } from "./redux/authSlice";
+import { category } from "./redux/categorySlice";
+import { getAll } from "./redux/productListSlice";
 import {
+  ConfirmOTP,
   LoginScreen,
   RegisterScreen,
   ResetPasswordScreen,
-  Dashboard,
-  ConfirmOTP,
+  UserScreen,
 } from "./screens";
-import { RootSiblingParent } from "react-native-root-siblings";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, refreshToken } from "./redux/authSlice";
-import { UserScreen } from "./screens";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { advertisement } from "./redux/advertisementSlice";
-import { getAll } from "./redux/productListSlice";
-import { suppliers } from "./redux/supplierSlice";
 
 const Stack = createStackNavigator();
 const Root = () => {
@@ -37,7 +34,7 @@ const Root = () => {
 
     dispatch(getAll(paging));
 
-    dispatch(suppliers());
+    dispatch(category());
   }, [dispatch]);
 
   return (

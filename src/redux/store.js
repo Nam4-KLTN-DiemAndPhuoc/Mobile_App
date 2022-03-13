@@ -3,13 +3,13 @@ import authSlice from "./authSlice";
 import { combineReducers } from "redux";
 import advertisementSlice from "./advertisementSlice";
 import productListSlice from "./productListSlice";
-import supplierSlice from "./supplierSlice";
+import categorySlice from "./categorySlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
   advertisement: advertisementSlice,
   productList: productListSlice,
-  suppliers: supplierSlice,
+  category: categorySlice,
 });
 
 const store = configureStore({ reducer: rootReducer });

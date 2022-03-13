@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 export default function SearchFilter() {
   const [itemSelected, setItemSelected] = useState("Tất cả");
-  const { suppliers } = useSelector((state) => state.suppliers);
+  const { category } = useSelector((state) => state.category);
   return (
     <View style={styles.container}>
       <View style={styles.filterPrice}>
@@ -15,23 +15,28 @@ export default function SearchFilter() {
             setItemSelected(itemValue);
           }}
         >
-          <Picker.Item label="Giá" value={true} />
-          <Picker.Item label="Tăng dần" value={true} />
-          <Picker.Item label="Giảm dần" value={false} />
+          <Picker.Item style={styles.textItem} label="Giá" value={true} />
+          <Picker.Item style={styles.textItem} label="Tăng dần" value={true} />
+          <Picker.Item style={styles.textItem} label="Giảm dần" value={false} />
         </Picker>
       </View>
-      <View style={styles.filterPrice}>
+      <View style={styles.filterSupplier}>
         <Picker
           selectedValue={itemSelected}
           onValueChange={(itemValue, itemIndex) => {
             setItemSelected(itemValue);
           }}
         >
-          <Picker.Item label="Nhà cung cấp" value="Tất cả" />
-          {suppliers.map((item) => (
+          <Picker.Item
+            style={styles.textItem}
+            label="Danh mục"
+            value="Tất cả"
+          />
+          {category.map((item) => (
             <Picker.Item
+              style={styles.textItem}
               key={item.id}
-              label={item.supplierName}
+              label={item.name}
               value={item.id}
             />
           ))}
@@ -55,5 +60,18 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     marginLeft: 20,
+    marginTop: 5,
+  },
+  filterSupplier: {
+    width: 150,
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    height: 40,
+    justifyContent: "center",
+    marginRight: 20,
+    marginTop: 5,
+  },
+  textItem: {
+    fontSize: 14,
   },
 });

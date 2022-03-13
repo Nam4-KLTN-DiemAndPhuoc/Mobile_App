@@ -8,12 +8,10 @@ import {
   View,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export default function SearchHeader() {
-  const { suppliers } = useSelector((state) => state.suppliers);
   return (
     <KeyboardAvoidingView>
       <View style={styles.container}>

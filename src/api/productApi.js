@@ -19,6 +19,21 @@ const productApi = {
     const url = `product-service/product/top3`;
     return axiosClient.get(url);
   },
+  findBySupplier: (params) => {
+    const { id, page, limit } = data;
+    const url = `product-service/product/supplier/${id}?page=${page}&limit=${limit}`;
+    return axiosClient.get(url);
+  },
+  findByCategory: (params) => {
+    const { id, page, limit } = data;
+    const url = `product-service/product/category/${id}?page=${page}&limit=${limit}`;
+    return axiosClient.get(url);
+  },
+  findByCategoryAndName: (params) => {
+    const { id, name, page, limit } = data;
+    const url = `product-service/product/category/${id}/${name}?page=${page}&limit=${limit}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default productApi;
