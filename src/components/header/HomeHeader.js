@@ -1,17 +1,19 @@
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 export default function HomeHeader() {
-  const [itemSelected, setItemSelected] = useState("Tất cả");
-
+  const [itemSelected, setItemSelected] = useState("danhmuc");
+  const navigation = useNavigation();
   const { category } = useSelector((state) => state.category);
 
-  const navigation = useNavigation();
+  const handleSelectCategory = (itemValue) => {
+    setItemSelected(itemValue);
+    navigation.navigate("SearchScreen", { itemValue });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -21,13 +23,22 @@ export default function HomeHeader() {
         <View style={styles.picker}>
           <Picker
             selectedValue={itemSelected}
-            onValueChange={(itemValue, itemIndex) => {
-              setItemSelected(itemValue);
-            }}
+            onValueChange={(itemValue, itemIndex) =>
+              handleSelectCategory(itemValue)
+            }
           >
-            <Picker.Item label="Danh mục" value="Tất cả" />
+            <Picker.Item
+              style={styles.textItem}
+              label="Danh mục"
+              value="danhmuc"
+            />
             {category.map((item) => (
-              <Picker.Item key={item.id} label={item.name} value={item.id} />
+              <Picker.Item
+                style={styles.textItem}
+                key={item.id}
+                label={item.name}
+                value={item.id}
+              />
             ))}
           </Picker>
         </View>
@@ -67,17 +78,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 20,
-    width: "60%",
+    width: "58%",
     backgroundColor: "#C4C4C4",
   },
 
   picker: {
     height: 40,
-    width: "35%",
+    width: "37%",
     backgroundColor: "#C4C4C4",
     marginLeft: 10,
     borderRadius: 20,
     justifyContent: "center",
     marginBottom: 10,
+  },
+  textItem: {
+    fontSize: 14,
   },
 });

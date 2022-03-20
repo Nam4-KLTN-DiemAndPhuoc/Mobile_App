@@ -10,13 +10,19 @@ import { advertisement } from "./redux/advertisementSlice";
 import { refreshToken } from "./redux/authSlice";
 import { category } from "./redux/categorySlice";
 import { getAll } from "./redux/productListSlice";
+import { findAll } from "./redux/productSearchSlice";
+import { useNavigation } from "@react-navigation/core";
+
 import {
   ConfirmOTP,
   LoginScreen,
+  ProductDetail,
   RegisterScreen,
   ResetPasswordScreen,
   UserScreen,
 } from "./screens";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 const Root = () => {
@@ -35,6 +41,8 @@ const Root = () => {
     dispatch(getAll(paging));
 
     dispatch(category());
+
+    dispatch(findAll(paging));
   }, [dispatch]);
 
   return (
@@ -87,6 +95,29 @@ const Root = () => {
               })}
               name="ConfirmOTP"
               component={ConfirmOTP}
+            />
+
+            <Stack.Screen
+              options={({ navigation }) => ({
+                title: "DETAIL",
+                headerTitleStyle: {
+                  marginLeft: 80,
+                },
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("CartScreen")}
+                  >
+                    <Ionicons
+                      style={{ marginRight: 20 }}
+                      name="cart-outline"
+                      size={30}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                ),
+              })}
+              name="ProductDetail"
+              component={ProductDetail}
             />
           </Stack.Navigator>
         </NavigationContainer>

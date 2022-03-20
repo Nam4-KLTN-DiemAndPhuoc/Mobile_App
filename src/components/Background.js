@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  KeyboardAvoidingView,
-  View,
-} from "react-native";
-import { theme } from "../core/theme";
+import { StyleSheet, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { theme } from "../core/theme";
 
 export default function Background({ children }) {
   return (

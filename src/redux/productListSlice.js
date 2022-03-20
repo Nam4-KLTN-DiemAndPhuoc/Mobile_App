@@ -15,19 +15,6 @@ export const getAll = createAsyncThunk("getAll", async (params, thunkAPI) => {
   }
 });
 
-export const findByName = createAsyncThunk(
-  "findByName",
-  async (params, thunkAPI) => {
-    try {
-      const res = await productApi.findByName(params);
-
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
-
 const productListSlice = createSlice({
   name: "products",
   initialState,
@@ -35,16 +22,9 @@ const productListSlice = createSlice({
     // get all
     [getAll.pending]: (state, action) => {},
     [getAll.fulfilled]: (state, action) => {
-      state.products = action.payload;
+      state.products = state.products.concat(action.payload);
     },
     [getAll.rejected]: (state, action) => {},
-
-    // find by name
-    [findByName.pending]: (state, action) => {},
-    [findByName.fulfilled]: (state, action) => {
-      state.products = action.payload;
-    },
-    [findByName.rejected]: (state, action) => {},
   },
 });
 

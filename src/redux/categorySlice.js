@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import categoryApi from "../api/categoryApi";
 const initialState = {
   category: [],
+  categoryFind: {},
 };
 
 export const category = createAsyncThunk(
@@ -9,7 +10,17 @@ export const category = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await categoryApi.getAllCategory();
-      console.log(res);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const findCategoryById = createAsyncThunk(
+  "findCategoryById",
+  async (params, thunkAPI) => {
+    try {
+      const res = await categoryApi.getById(params);
       return res;
     } catch (error) {
       console.log(error);
@@ -26,6 +37,12 @@ const categorySlice = createSlice({
       state.category = action.payload;
     },
     [category.rejected]: (state, action) => {},
+    // find by id
+    [findCategoryById.pending]: (state, action) => {},
+    [findCategoryById.fulfilled]: (state, action) => {
+      state.categoryFind = action.payload;
+    },
+    [findCategoryById.rejected]: (state, action) => {},
   },
 });
 

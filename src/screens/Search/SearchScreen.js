@@ -1,20 +1,22 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import SearchHeader from "../../components/header/SearchHeader";
-import SearchBody from "../../components/search/SearchBody";
-import SearchFilter from "../../components/search/SearchFilter";
+import ListProductSearch from "../../components/search/ListProductSearch";
 
-export default function SearchScreen() {
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+export default function SearchScreen({ route }) {
+  const [page, setPage] = useState(1);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SearchHeader />
+        <SearchHeader
+          pageSearch={page}
+          categorySelect={route.params?.itemValue}
+        />
       </View>
-      <View>
-        <SearchFilter />
-      </View>
-      <View>
-        <SearchBody />
+      <View style={styles.listItem}>
+        <ListProductSearch page={page} setPage={setPage} />
       </View>
     </View>
   );
@@ -22,9 +24,8 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: { backgroundColor: "#C4C4C4", height: "100%" },
-  header: { height: 100 },
-  filter: {
-    height: "15%",
-    backgroundColor: "#F08F5F",
+  header: { height: 150 },
+  listItem: {
+    height: windowHeight - 160,
   },
 });

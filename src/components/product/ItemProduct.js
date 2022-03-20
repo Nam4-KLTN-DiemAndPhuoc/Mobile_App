@@ -2,11 +2,36 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/core";
+import { useDispatch } from "react-redux";
+import { getProductById } from "../../redux/ProductSlice";
+import { findImageByProductId } from "../../redux/imageProductSlice";
+import { findCommentByProductId } from "../../redux/commentSlice";
+import { findCategoryById } from "../../redux/categorySlice";
+import { findSupplierById } from "../../redux/supplierSlice";
+import { findAttributeByProductId } from "../../redux/attributeSlice";
 
 export default function ItemProduct({ item }) {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleClick = (id, idCategory) => {
+    dispatch(getProductById(id));
+    dispatch(findImageByProductId(id));
+    dispatch(findCommentByProductId(id));
+    dispatch(findCategoryById(idCategory));
+    dispatch(findSupplierById(item.product.supplierId));
+    dispatch(findAttributeByProductId(id));
+    navigation.navigate("ProductDetail");
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          handleClick(item.product.id, item.product.categoryId);
+        }}
+      >
         <Image
           style={styles.imageItem}
           source={{
