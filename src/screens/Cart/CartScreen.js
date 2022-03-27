@@ -15,10 +15,6 @@ export default function CartScreen() {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  console.log(token);
-  console.log(cartDetails);
-  console.log("=============================", cartDetailsDefault);
-
   // useEffect(() => {
   //   // if (user && cartDetailsDefault.length > 0) {
   //   //   console.log("Vào Đayyyyyyyyyyyyyyyy");

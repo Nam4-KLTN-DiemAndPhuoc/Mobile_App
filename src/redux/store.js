@@ -11,6 +11,7 @@ import imageProductSlice from "./imageProductSlice";
 import supplierSlice from "./supplierSlice";
 import attributeSlice from "./attributeSlice";
 import cartSlice from "./cartSlice";
+import logger from "redux-logger";
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -26,6 +27,8 @@ const rootReducer = combineReducers({
   cart: cartSlice,
 });
 
-const store = configureStore({ reducer: rootReducer });
+const store = configureStore({
+  reducer: rootReducer,
+});
 
 export default store;

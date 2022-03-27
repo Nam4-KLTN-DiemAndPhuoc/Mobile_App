@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import Background from "../components/Background";
@@ -8,14 +8,16 @@ import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
 import { emailValidator } from "../helpers/emailValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
+import { getCart } from "../redux/cartSlice";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
+  const { user, token } = useSelector((state) => state.auth);
 
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
@@ -30,7 +32,7 @@ export default function LoginScreen({ navigation }) {
       password: password.value,
     };
     const res = await dispatch(login(data));
-
+    console.log(res);
     navigation.goBack();
   };
 

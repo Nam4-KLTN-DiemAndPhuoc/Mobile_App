@@ -27,11 +27,8 @@ import { getCart } from "./redux/cartSlice";
 
 const Stack = createStackNavigator();
 const Root = () => {
-  const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { cartDetails, cartDetailsDefault } = useSelector(
-    (state) => state.cart
-  );
+  const { user, token } = useSelector((state) => state.auth);
 
   useEffect(async () => {
     dispatch(refreshToken());
@@ -47,7 +44,7 @@ const Root = () => {
     dispatch(category());
 
     dispatch(findAll(paging));
-  }, [dispatch, user, token]);
+  }, [dispatch, user]);
 
   return (
     <RootSiblingParent>

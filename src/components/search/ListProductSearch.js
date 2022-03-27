@@ -7,14 +7,11 @@ import ItemProduct from "../product/ItemProduct";
 export default function ListProductSearch({ page, setPage }) {
   const { productSearch } = useSelector((state) => state.productSearch);
 
-  console.log(productSearch);
-
   const [pageSreach, setPageSreach] = useState(page);
 
   const handleLoad = () => {
     setPage(pageSreach + 1);
     setPageSreach(pageSreach + 1);
-    console.log(pageSreach + 1);
   };
 
   const isCloseToBottom = ({

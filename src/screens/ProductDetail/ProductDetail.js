@@ -78,17 +78,16 @@ export default function ProductDetail() {
                 <Picker
                   selectedValue={itemSelected}
                   onValueChange={(itemValue, itemIndex) => {
-                    console.log(itemValue);
                     setItemSelected(itemValue);
                   }}
                   style={{
                     width: 100,
                   }}
                 >
-                  {attributes.map((item) => (
+                  {attributes.map((item, index) => (
                     <Picker.Item
                       style={styles.textItem}
-                      key={item.id}
+                      key={index}
                       label={item.size}
                       value={item}
                     />
