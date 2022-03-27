@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
     };
     const res = await dispatch(login(data));
 
-    navigation.navigate("Dashboard");
+    navigation.goBack();
   };
 
   return (

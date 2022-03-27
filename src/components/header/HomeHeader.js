@@ -32,7 +32,7 @@ export default function HomeHeader() {
               label="Danh mục"
               value="danhmuc"
             />
-            {category.map((item) => (
+            {category?.map((item) => (
               <Picker.Item
                 style={styles.textItem}
                 key={item.id}

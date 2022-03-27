@@ -30,7 +30,7 @@ export default function ConfirmOTP({ navigation, route }) {
     const res = await authApi.validateOTP(data);
     if (res == true) {
       dispatch(register(route.params.data));
-      navigation.navigate("LoginScreen");
+      navigation.navigate("Dashboard");
     } else {
       Toast.show("Mã xác thực không chính xác", {
         duration: Toast.durations.LONG,

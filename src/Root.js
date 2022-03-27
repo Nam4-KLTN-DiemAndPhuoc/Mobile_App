@@ -23,11 +23,15 @@ import {
 } from "./screens";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { getCart } from "./redux/cartSlice";
 
 const Stack = createStackNavigator();
 const Root = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const { cartDetails, cartDetailsDefault } = useSelector(
+    (state) => state.cart
+  );
 
   useEffect(async () => {
     dispatch(refreshToken());
@@ -43,7 +47,7 @@ const Root = () => {
     dispatch(category());
 
     dispatch(findAll(paging));
-  }, [dispatch]);
+  }, [dispatch, user, token]);
 
   return (
     <RootSiblingParent>

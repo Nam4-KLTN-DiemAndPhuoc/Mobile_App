@@ -10,6 +10,7 @@ import commentSlice from "./commentSlice";
 import imageProductSlice from "./imageProductSlice";
 import supplierSlice from "./supplierSlice";
 import attributeSlice from "./attributeSlice";
+import cartSlice from "./cartSlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   image: imageProductSlice,
   suppliers: supplierSlice,
   attribute: attributeSlice,
+  cart: cartSlice,
 });
 
 const store = configureStore({ reducer: rootReducer });

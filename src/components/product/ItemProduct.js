@@ -3,17 +3,21 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProductById } from "../../redux/ProductSlice";
 import { findImageByProductId } from "../../redux/imageProductSlice";
 import { findCommentByProductId } from "../../redux/commentSlice";
 import { findCategoryById } from "../../redux/categorySlice";
 import { findSupplierById } from "../../redux/supplierSlice";
 import { findAttributeByProductId } from "../../redux/attributeSlice";
+import { addCartDetail, addCartDetailDefault } from "../../redux/cartSlice";
+import Toast from "react-native-root-toast";
 
 export default function ItemProduct({ item }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
 
   const handleClick = (id, idCategory) => {
     dispatch(getProductById(id));
@@ -23,6 +27,40 @@ export default function ItemProduct({ item }) {
     dispatch(findSupplierById(item.product.supplierId));
     dispatch(findAttributeByProductId(id));
     navigation.navigate("ProductDetail");
+  };
+
+  const addCartDetaill = () => {
+    console.log("CảTTTTTTTT", cart);
+    if (user) {
+      const data = {
+        amount: 1,
+        cart: cart,
+        productId: item.product.id,
+      };
+      dispatch(addCartDetail(data));
+    } else {
+      const data = {
+        amount: 1,
+        cart: null,
+        product: item.product,
+      };
+
+      dispatch(addCartDetailDefault(data));
+    }
+
+    Toast.show("Đã thêm sản phẩm vào giỏ hàng", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      containerStyle: {
+        backgroundColor: "#C4C4C4",
+        borderRadius: 200,
+        marginBottom: 300,
+        paddingHorizontal: 20,
+        shadowColor: "#e6e6e6",
+        shadowOpacity: 0.5,
+      },
+      textStyle: { color: "#000", fontWeight: "bold" },
+    });
   };
 
   return (
@@ -44,7 +82,7 @@ export default function ItemProduct({ item }) {
 
         <View style={styles.price}>
           <Text style={styles.textPrice}> {item.product.price} VNĐ</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => addCartDetaill()}>
             <FontAwesome
               style={styles.cartIcon}
               name="cart-plus"
