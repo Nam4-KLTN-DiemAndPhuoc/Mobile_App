@@ -44,7 +44,7 @@ const Root = () => {
     dispatch(category());
 
     dispatch(findAll(paging));
-  }, [dispatch, user]);
+  }, [dispatch]);
 
   return (
     <RootSiblingParent>

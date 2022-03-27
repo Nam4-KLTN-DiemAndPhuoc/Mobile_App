@@ -66,10 +66,14 @@ const MainTab = () => {
 
       <Tab.Screen
         options={{
-          title: "Cart",
+          title: "GIỎ HÀNG",
           tabBarIcon: ({ color: color }) => (
             <Ionicons name="ios-cart-outline" size={iconSize} color={color} />
           ),
+          headerTitleStyle: {
+            marginLeft: 100,
+            fontWeight: "bold",
+          },
         }}
         name="CartScreen"
         component={CartScreen}

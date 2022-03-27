@@ -32,7 +32,6 @@ export const addCartDetail = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await cartApi.addCartDetail(params);
-      console.log(res);
       return res;
     } catch (error) {
       console.log(error);

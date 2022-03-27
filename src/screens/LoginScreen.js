@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }) {
       password: password.value,
     };
     const res = await dispatch(login(data));
-    console.log(res);
+    dispatch(getCart(res.payload.user.id));
     navigation.goBack();
   };
 
