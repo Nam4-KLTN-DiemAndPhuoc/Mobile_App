@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ImageDetail from "../../components/productDetail/ImageDetail";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import { MaterialIcons } from "@expo/vector-icons";
+import { addCartDetail, addCartDetailDefault } from "../../redux/cartSlice";
+import Toast from "react-native-root-toast";
 
 export default function ProductDetail() {
   const { product } = useSelector((state) => state.product);
@@ -15,8 +17,12 @@ export default function ProductDetail() {
   const { supplier } = useSelector((state) => state.suppliers);
   const { attributes } = useSelector((state) => state.attribute);
   const [itemSelected, setItemSelected] = useState(attributes[0]);
+  const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
 
   const [amount, setAmount] = useState(1);
+
+  const dispatch = useDispatch();
 
   const handlerMinus = () => {
     if (amount >= 2) {
@@ -31,6 +37,43 @@ export default function ProductDetail() {
   const inputAmount = (text) => {
     if (text <= itemSelected?.amount) setAmount(text);
   };
+
+  const addCartDetaill = () => {
+    if (user) {
+      const data = {
+        amount: amount,
+        cart: cart,
+        productId: product.id,
+      };
+      dispatch(addCartDetail(data));
+    } else {
+      const data = {
+        cartDetail: {
+          amount: amount,
+          cart: null,
+        },
+
+        product: product,
+      };
+
+      dispatch(addCartDetailDefault(data));
+    }
+
+    Toast.show("Đã thêm sản phẩm vào giỏ hàng", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      containerStyle: {
+        backgroundColor: "#C4C4C4",
+        borderRadius: 200,
+        marginBottom: 300,
+        paddingHorizontal: 20,
+        shadowColor: "#e6e6e6",
+        shadowOpacity: 0.5,
+      },
+      textStyle: { color: "#000", fontWeight: "bold" },
+    });
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -98,7 +141,10 @@ export default function ProductDetail() {
           </View>
         </View>
         <View style={styles.action}>
-          <TouchableOpacity style={styles.addToCart}>
+          <TouchableOpacity
+            style={styles.addToCart}
+            onPress={() => addCartDetaill()}
+          >
             <MaterialIcons name="add-shopping-cart" size={30} color="black" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.buyNow}>

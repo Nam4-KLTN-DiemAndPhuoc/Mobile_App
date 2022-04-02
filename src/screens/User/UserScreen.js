@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { responsiveFontSize } from "react-native-responsive-dimensions";
 import { logout } from "../../redux/authSlice";
 import { useNavigation } from "@react-navigation/core";
+import { clearCartDetail } from "../../redux/cartSlice";
 export default function UserScreen(props) {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -28,7 +29,8 @@ export default function UserScreen(props) {
         text: "OK",
         onPress: () => {
           dispatch(logout());
-          navigation.navigate("LoginScreen");
+          dispatch(clearCartDetail());
+          navigation.navigate("Dashboard");
         },
       },
     ]);

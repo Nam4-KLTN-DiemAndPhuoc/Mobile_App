@@ -8,10 +8,74 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductById } from "../../redux/ProductSlice";
+import { findImageByProductId } from "../../redux/imageProductSlice";
+import { findCommentByProductId } from "../../redux/commentSlice";
+import { findCategoryById } from "../../redux/categorySlice";
+import { findSupplierById } from "../../redux/supplierSlice";
+import { findAttributeByProductId } from "../../redux/attributeSlice";
+import { useNavigation } from "@react-navigation/core";
+import { addCartDetail, addCartDetailDefault } from "../../redux/cartSlice";
+import Toast from "react-native-root-toast";
 
 export default function AdvertisementItem({ item }) {
+  const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const navigation = useNavigation();
+
+  const handleClick = (id, idCategory) => {
+    dispatch(getProductById(id));
+    dispatch(findImageByProductId(id));
+    dispatch(findCommentByProductId(id));
+    dispatch(findCategoryById(idCategory));
+    dispatch(findSupplierById(item.product.supplierId));
+    dispatch(findAttributeByProductId(id));
+    navigation.navigate("ProductDetail");
+  };
+
+  const addCartDetaill = () => {
+    if (user) {
+      const data = {
+        amount: 1,
+        cart: cart,
+        productId: item.product.id,
+      };
+      dispatch(addCartDetail(data));
+    } else {
+      const data = {
+        cartDetail: {
+          amount: 1,
+          cart: null,
+        },
+
+        product: item.product,
+      };
+
+      dispatch(addCartDetailDefault(data));
+    }
+
+    Toast.show("Đã thêm sản phẩm vào giỏ hàng", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      containerStyle: {
+        backgroundColor: "#C4C4C4",
+        borderRadius: 200,
+        marginBottom: 300,
+        paddingHorizontal: 20,
+        shadowColor: "#e6e6e6",
+        shadowOpacity: 0.5,
+      },
+      textStyle: { color: "#000", fontWeight: "bold" },
+    });
+  };
+
   return (
-    <View>
+    <TouchableOpacity
+      onPress={() => handleClick(item.product.id, item.product.categoryId)}
+    >
       <ImageBackground
         source={{
           uri: item.product.avatar,
@@ -19,7 +83,10 @@ export default function AdvertisementItem({ item }) {
         style={styles.imageBackground}
       >
         <View style={styles.container}>
-          <TouchableOpacity style={styles.btnBuy}>
+          <TouchableOpacity
+            style={styles.btnBuy}
+            onPress={() => addCartDetaill()}
+          >
             <FontAwesome
               style={styles.textBtn}
               name="cart-plus"
@@ -36,7 +103,7 @@ export default function AdvertisementItem({ item }) {
           </Text>
         </View>
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({

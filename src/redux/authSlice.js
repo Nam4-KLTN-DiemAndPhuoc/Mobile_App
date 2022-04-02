@@ -5,19 +5,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const initialState = {
   user: null,
   token: null,
+  messageError: null,
 };
 
-export const login = createAsyncThunk("login", async (params, thunkAPI) => {
-  try {
-    const res = await authApi.login(params);
+export const login = createAsyncThunk(
+  "login",
+  async (params, { rejectWithValue }) => {
+    try {
+      const res = await authApi.login(params);
+      if (res.token) {
+        await AsyncStorage.setItem("token", res.token);
+      }
 
-    await AsyncStorage.setItem("token", res.token);
-
-    return res;
-  } catch (error) {
-    console.log(error);
+      return res;
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
   }
-});
+);
 
 export const register = createAsyncThunk(
   "register",
@@ -34,13 +40,13 @@ export const register = createAsyncThunk(
 
 export const refreshToken = createAsyncThunk(
   "refreshToken",
-  async (params, thunkAPI) => {
+  async (params, { rejectWithValue }) => {
     try {
       const res = await authApi.refreshToken();
       await AsyncStorage.setItem("token", res.token);
       return res;
     } catch (error) {
-      console.log(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -64,7 +70,9 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.user = action.payload.user;
     },
-    [login.rejected]: (state, action) => {},
+    [login.rejected]: (state, action) => {
+      state.messageError = action.payload;
+    },
 
     // logout
     [logout.pending]: (state, action) => {},

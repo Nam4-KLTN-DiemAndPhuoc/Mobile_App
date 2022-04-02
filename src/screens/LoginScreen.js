@@ -11,13 +11,14 @@ import { passwordValidator } from "../helpers/passwordValidator";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
 import { getCart } from "../redux/cartSlice";
+import Toast from "react-native-root-toast";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
-  const { user, token } = useSelector((state) => state.auth);
+  const { user, token, messageError } = useSelector((state) => state.auth);
 
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
@@ -31,10 +32,30 @@ export default function LoginScreen({ navigation }) {
       email: email.value,
       password: password.value,
     };
-    const res = await dispatch(login(data));
-    dispatch(getCart(res.payload.user.id));
-    navigation.goBack();
+    dispatch(login(data));
   };
+
+  useEffect(() => {
+    if (user && !messageError) {
+      dispatch(getCart(user.id));
+      navigation.goBack();
+    }
+    if (messageError) {
+      Toast.show(messageError, {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        containerStyle: {
+          backgroundColor: "#C4C4C4",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
+        },
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
+    }
+  }, [user, messageError]);
 
   return (
     <Background>

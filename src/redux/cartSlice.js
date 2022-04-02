@@ -39,15 +39,65 @@ export const addCartDetail = createAsyncThunk(
   }
 );
 
+export const deleteCartDetail = createAsyncThunk(
+  "deleteCartDetail",
+  async (params, thunkAPI) => {
+    try {
+      const res = await cartApi.deleteCartDetail(params);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const updateCartDetail = createAsyncThunk(
+  "updateCartDetail",
+  async (params, thunkAPI) => {
+    try {
+      const res = await cartApi.updateCartDetail(params);
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: "cartSlice",
   initialState,
   reducers: {
     addCartDetailDefault: (state, action) => {
-      state.cartDetailsDefault.push(action.payload);
+      const p = state.cartDetailsDefault?.find(
+        (cartDetail) => cartDetail.product.id == action.payload.product.id
+      );
+      if (p) {
+        p.cartDetail.amount =
+          p.cartDetail.amount + action.payload.cartDetail.amount;
+      } else {
+        state.cartDetailsDefault.push(action.payload);
+      }
     },
     clearCartDetailDefault: (state, action) => {
       state.cartDetailsDefault = [];
+    },
+    clearCartDetail: (state, action) => {
+      state.cartDetails = [];
+    },
+    deleteCartDetailDefault: (state, action) => {
+      const array = state.cartDetailsDefault.filter(
+        (cartDetail) => cartDetail.product.id != action.payload
+      );
+      state.cartDetailsDefault = array;
+    },
+    updateCartDetailDefault: (state, action) => {
+      const p = state.cartDetailsDefault?.find(
+        (cartDetail) => cartDetail.product.id == action.payload.product.id
+      );
+      if (p) {
+        p.cartDetail.amount = action.payload.cartDetail.amount;
+      }
     },
   },
   extraReducers: {
@@ -68,12 +118,51 @@ const cartSlice = createSlice({
     // addCartDetail
     [addCartDetail.pending]: (state, action) => {},
     [addCartDetail.fulfilled]: (state, action) => {
-      state.cartDetails.push(action.payload);
+      const p = state.cartDetails?.find(
+        (cartDetail) => cartDetail.product.id == action.payload.product.id
+      );
+      if (p) {
+        p.cartDetail.amount = action.payload.cartDetail.amount;
+      } else {
+        state.cartDetails.push(action.payload);
+      }
     },
     [addCartDetail.rejected]: (state, action) => {},
+
+    // delete
+    [deleteCartDetail.pending]: (state, action) => {},
+    [deleteCartDetail.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      const array = state.cartDetails.filter(
+        (cartDetail) => cartDetail.cartDetail.id != action.payload
+      );
+
+      state.cartDetails = array;
+    },
+    [deleteCartDetail.rejected]: (state, action) => {},
+
+    // updateCartDetail
+    [updateCartDetail.pending]: (state, action) => {},
+    [updateCartDetail.fulfilled]: (state, action) => {
+      console.log("cap nhat so luong", action.payload);
+      const p = state.cartDetails?.find(
+        (cartDetail) => cartDetail.cartDetail.id == action.payload.cartDetail.id
+      );
+      if (p) {
+        console.log("cap nhat so luong");
+        p.cartDetail.amount = action.payload.cartDetail.amount;
+      }
+      console.log(state.cartDetails);
+    },
+    [updateCartDetail.rejected]: (state, action) => {},
   },
 });
 
-export const { addCartDetailDefault, clearCartDetailDefault } =
-  cartSlice.actions;
+export const {
+  addCartDetailDefault,
+  clearCartDetailDefault,
+  clearCartDetail,
+  deleteCartDetailDefault,
+  updateCartDetailDefault,
+} = cartSlice.actions;
 export default cartSlice.reducer;

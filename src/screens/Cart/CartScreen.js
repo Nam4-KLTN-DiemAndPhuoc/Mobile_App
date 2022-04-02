@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import ItemCartDetail from "../../components/cartDetail/ItemCartDetail";
@@ -7,6 +7,7 @@ import {
   addCartDetail,
   clearCartDetailDefault,
   getCart,
+  getCartDetail,
 } from "../../redux/cartSlice";
 
 export default function CartScreen() {
@@ -17,30 +18,69 @@ export default function CartScreen() {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  console.log(cartDetailsDefault);
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    if (user) {
+      dispatch(getCartDetail(cart.id));
+    }
+  }, [dispatch, user]);
 
-  // useEffect(() => {
-  //   // if (user && cartDetailsDefault.length > 0) {
-  //   //   console.log("Vào Đayyyyyyyyyyyyyyyy");
-  //   //   cartDetailsDefault.map((cartDetail) => {
-  //   //     console.log(cartDetail);
-  //   //     const data = {
-  //   //       amount: cartDetail.amount,
-  //   //       cart: cart,
-  //   //       productId: cartDetail.product.id,
-  //   //     };
-  //   //     dispatch(addCartDetail(data));
-  //   //   });
-  //   //   dispatch(clearCartDetailDefault());
-  //   // }
-  // }, [dispatch]);
+  useEffect(() => {
+    if (user && cartDetailsDefault.length > 0) {
+      cartDetailsDefault?.map((cartDetail) => {
+        const data = {
+          amount: cartDetail.cartDetail.amount,
+          cart: cart,
+          productId: cartDetail.product.id,
+        };
+        dispatch(addCartDetail(data));
+      });
+      dispatch(clearCartDetailDefault());
+    }
+
+    var price = 0;
+    if (user) {
+      cartDetails?.map(
+        (cartDetail) =>
+          (price =
+            price +
+            cartDetail.cartDetail.amount *
+              (cartDetail.product.price -
+                cartDetail.product.discount * cartDetail.product.price))
+      );
+
+      setTotalPrice(price);
+    }
+
+    if (!user) {
+      cartDetailsDefault?.map(
+        (cartDetail) =>
+          (price =
+            price +
+            cartDetail.cartDetail.amount *
+              (cartDetail.product.price -
+                cartDetail.product.discount * cartDetail.product.price))
+      );
+      setTotalPrice(price);
+    }
+  }, [dispatch, cartDetails, cartDetailsDefault]);
 
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        <ItemCartDetail />
-        <ItemCartDetail />
-        <ItemCartDetail />
+        {user ? (
+          <FlatList
+            data={cartDetails}
+            renderItem={({ item }) => <ItemCartDetail item={item} />}
+            keyExtractor={(item, index) => (key = index)}
+          />
+        ) : (
+          <FlatList
+            data={cartDetailsDefault}
+            renderItem={({ item }) => <ItemCartDetail item={item} />}
+            keyExtractor={(item, index) => (key = index)}
+          />
+        )}
       </View>
       <View style={styles.footer}>
         <View style={styles.totalPrice}>
@@ -48,7 +88,7 @@ export default function CartScreen() {
             Tổng tiền
           </Text>
           <Text style={{ fontWeight: "bold", fontSize: 20, marginRight: 15 }}>
-            100000 VNĐ
+            {totalPrice} VNĐ
           </Text>
         </View>
 

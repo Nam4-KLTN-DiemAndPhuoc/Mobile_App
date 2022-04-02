@@ -30,7 +30,6 @@ export default function ItemProduct({ item }) {
   };
 
   const addCartDetaill = () => {
-    console.log("CảTTTTTTTT", cart);
     if (user) {
       const data = {
         amount: 1,
@@ -40,8 +39,11 @@ export default function ItemProduct({ item }) {
       dispatch(addCartDetail(data));
     } else {
       const data = {
-        amount: 1,
-        cart: null,
+        cartDetail: {
+          amount: 1,
+          cart: null,
+        },
+
         product: item.product,
       };
 

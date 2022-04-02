@@ -1,14 +1,123 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteCartDetail,
+  deleteCartDetailDefault,
+  updateCartDetail,
+  updateCartDetailDefault,
+} from "../../redux/cartSlice";
+import Toast from "react-native-root-toast";
 
-export default function ItemCartDetail() {
-  const handlerMinus = () => {};
+export default function ItemCartDetail({ item }) {
+  console.log(item);
 
-  const handlerAdd = () => {};
+  const dispatch = useDispatch();
+  const { user, token } = useSelector((state) => state.auth);
+  const [amount, setAmount] = useState(item?.cartDetail?.amount);
+
+  const handlerMinus = () => {
+    if (amount >= 2) {
+      setAmount(amount - 1);
+
+      if (user) {
+        const data = {
+          id: item.cartDetail.id,
+          amount: amount - 1,
+          cart: item.cartDetail.cart,
+          productId: item.cartDetail.productId,
+        };
+
+        dispatch(updateCartDetail(data));
+      } else {
+        const data = {
+          cartDetail: {
+            amount: amount - 1,
+            cart: null,
+          },
+          product: item.product,
+        };
+
+        dispatch(updateCartDetailDefault(data));
+      }
+
+      Toast.show("Đã cập nhật giỏ hàng", {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM,
+        containerStyle: {
+          backgroundColor: "#C4C4C4",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
+        },
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
+    }
+  };
+
+  const handlerAdd = () => {
+    setAmount(Number(amount) + 1);
+    if (user) {
+      const data = {
+        id: item.cartDetail.id,
+        amount: Number(amount) + 1,
+        cart: item.cartDetail.cart,
+        productId: item.cartDetail.productId,
+      };
+      dispatch(updateCartDetail(data));
+    } else {
+      const data = {
+        cartDetail: {
+          amount: Number(amount) + 1,
+          cart: null,
+        },
+        product: item.product,
+      };
+
+      dispatch(updateCartDetailDefault(data));
+    }
+
+    Toast.show("Đã cập nhật giỏ hàng", {
+      duration: Toast.durations.SHORT,
+      position: Toast.positions.BOTTOM,
+      containerStyle: {
+        backgroundColor: "#C4C4C4",
+        borderRadius: 200,
+        marginBottom: 300,
+        paddingHorizontal: 20,
+        shadowColor: "#e6e6e6",
+        shadowOpacity: 0.5,
+      },
+      textStyle: { color: "#000", fontWeight: "bold" },
+    });
+  };
+
+  const handleDelete = () => {
+    if (user) {
+      dispatch(deleteCartDetail(item.cartDetail.id));
+    } else {
+      dispatch(deleteCartDetailDefault(item.product.id));
+    }
+    Toast.show("Đã cập nhật giỏ hàng", {
+      duration: Toast.durations.SHORT,
+      position: Toast.positions.BOTTOM,
+      containerStyle: {
+        backgroundColor: "#C4C4C4",
+        borderRadius: 200,
+        marginBottom: 300,
+        paddingHorizontal: 20,
+        shadowColor: "#e6e6e6",
+        shadowOpacity: 0.5,
+      },
+      textStyle: { color: "#000", fontWeight: "bold" },
+    });
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -18,6 +127,7 @@ export default function ItemCartDetail() {
           padding: 5,
           borderRadius: 5,
         }}
+        onPress={() => handleDelete()}
       >
         <FontAwesome5 name="trash-alt" size={24} color="black" />
       </TouchableOpacity>
@@ -25,7 +135,7 @@ export default function ItemCartDetail() {
       <View style={styles.product}>
         <Image
           source={{
-            uri: "https://reactnative.dev/img/tiny_logo.png",
+            uri: item?.product?.avatar,
           }}
           style={{
             width: 70,
@@ -37,10 +147,12 @@ export default function ItemCartDetail() {
         />
         <View style={styles.information}>
           <Text style={{ fontSize: 10, color: "#B1B1B1" }}>ABCDCCC</Text>
-          <Text>ÁO KHUNG LONG</Text>
+          <Text>{item?.product?.name}</Text>
           <View style={styles.price}>
             <View>
-              <Text style={{ color: "#F08F5F" }}>100000 VNĐ</Text>
+              <Text style={{ color: "#F08F5F" }}>
+                {item?.product?.price} VNĐ
+              </Text>
             </View>
 
             <View style={styles.amount}>
@@ -51,7 +163,7 @@ export default function ItemCartDetail() {
                 <AntDesign name="minus" size={24} color="black" />
               </TouchableOpacity>
               <TextInput
-                value={`${2}`}
+                value={`${amount}`}
                 keyboardType="numeric"
                 style={{ padding: 10, color: "#000" }}
                 editable={false}
