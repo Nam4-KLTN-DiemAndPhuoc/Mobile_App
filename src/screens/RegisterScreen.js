@@ -85,6 +85,19 @@ export default function RegisterScreen({ navigation }) {
     };
     const res = await authApi.sendOTP(otp);
     if (res == true) {
+      Toast.show("Mã xác thực đã được gửi đến email của bạn!", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        containerStyle: {
+          backgroundColor: "#C4C4C4",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
+        },
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
       navigation.navigate("ConfirmOTP", { data });
     } else {
       Toast.show("Email đã được đăng kí", {

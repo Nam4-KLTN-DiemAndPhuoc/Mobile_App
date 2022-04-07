@@ -44,7 +44,7 @@ const MainTab = () => {
       <Tab.Screen
         options={{
           headerShown: false,
-          title: "Home",
+          title: "Trang chủ",
           tabBarIcon: ({ color: color }) => {
             return <AntDesign name="home" size={iconSize} color={color} />;
           },
@@ -55,7 +55,7 @@ const MainTab = () => {
       <Tab.Screen
         options={{
           headerShown: false,
-          title: "Search",
+          title: "Tìm kiếm",
           tabBarIcon: ({ color: color }) => (
             <Ionicons name="search" size={iconSize} color={color} />
           ),
@@ -80,7 +80,7 @@ const MainTab = () => {
       />
       <Tab.Screen
         options={{
-          title: "Order",
+          title: "Đơn hàng",
           tabBarIcon: ({ color: color }) => (
             <MaterialIcons name="history" size={iconSize} color={color} />
           ),
@@ -91,7 +91,7 @@ const MainTab = () => {
 
       <Tab.Screen
         options={{
-          title: "User",
+          title: "Tài khoản",
           tabBarIcon: ({ color: color }) => (
             <FontAwesome name="user-circle-o" size={iconSize} color={color} />
           ),

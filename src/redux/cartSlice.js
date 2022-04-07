@@ -31,7 +31,9 @@ export const addCartDetail = createAsyncThunk(
   "addCartDetail",
   async (params, thunkAPI) => {
     try {
+      console.log(params);
       const res = await cartApi.addCartDetail(params);
+      console.log(res);
       return res;
     } catch (error) {
       console.log(error);
@@ -119,7 +121,10 @@ const cartSlice = createSlice({
     [addCartDetail.pending]: (state, action) => {},
     [addCartDetail.fulfilled]: (state, action) => {
       const p = state.cartDetails?.find(
-        (cartDetail) => cartDetail.product.id == action.payload.product.id
+        (cartDetail) =>
+          cartDetail.product.id == action.payload.product?.id &&
+          cartDetail.cartDetail.attributeId ==
+            action.payload.cartDetail.attributeId
       );
       if (p) {
         p.cartDetail.amount = action.payload.cartDetail.amount;
@@ -132,7 +137,6 @@ const cartSlice = createSlice({
     // delete
     [deleteCartDetail.pending]: (state, action) => {},
     [deleteCartDetail.fulfilled]: (state, action) => {
-      console.log(action.payload);
       const array = state.cartDetails.filter(
         (cartDetail) => cartDetail.cartDetail.id != action.payload
       );
@@ -144,15 +148,12 @@ const cartSlice = createSlice({
     // updateCartDetail
     [updateCartDetail.pending]: (state, action) => {},
     [updateCartDetail.fulfilled]: (state, action) => {
-      console.log("cap nhat so luong", action.payload);
       const p = state.cartDetails?.find(
         (cartDetail) => cartDetail.cartDetail.id == action.payload.cartDetail.id
       );
       if (p) {
-        console.log("cap nhat so luong");
         p.cartDetail.amount = action.payload.cartDetail.amount;
       }
-      console.log(state.cartDetails);
     },
     [updateCartDetail.rejected]: (state, action) => {},
   },

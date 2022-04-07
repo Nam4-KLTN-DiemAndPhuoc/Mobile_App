@@ -21,5 +21,9 @@ const athApi = {
     const url = `user-service/auth/validateOTP`;
     return axiosClient.post(url, data);
   },
+  changePassword: (data) => {
+    const url = `user-service/auth/change-password`;
+    return axiosClient.post(url, data);
+  },
 };
 export default athApi;

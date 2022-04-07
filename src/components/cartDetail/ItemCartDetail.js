@@ -14,8 +14,6 @@ import {
 import Toast from "react-native-root-toast";
 
 export default function ItemCartDetail({ item }) {
-  console.log(item);
-
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
   const [amount, setAmount] = useState(item?.cartDetail?.amount);

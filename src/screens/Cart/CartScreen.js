@@ -32,6 +32,7 @@ export default function CartScreen() {
           amount: cartDetail.cartDetail.amount,
           cart: cart,
           productId: cartDetail.product.id,
+          attributeId: cartDetail.cartDetail.attributeId,
         };
         dispatch(addCartDetail(data));
       });
@@ -44,9 +45,9 @@ export default function CartScreen() {
         (cartDetail) =>
           (price =
             price +
-            cartDetail.cartDetail.amount *
-              (cartDetail.product.price -
-                cartDetail.product.discount * cartDetail.product.price))
+            cartDetail?.cartDetail.amount *
+              (cartDetail?.product.price -
+                cartDetail?.product.discount * cartDetail?.product.price))
       );
 
       setTotalPrice(price);

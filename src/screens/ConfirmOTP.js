@@ -29,8 +29,15 @@ export default function ConfirmOTP({ navigation, route }) {
     };
     const res = await authApi.validateOTP(data);
     if (res == true) {
-      dispatch(register(route.params.data));
-      navigation.navigate("Dashboard");
+      if (route.params.data.userName) {
+        dispatch(register(route.params.data));
+        navigation.navigate("Dashboard");
+      } else {
+        const dt = {
+          email: route.params.data.email,
+        };
+        navigation.navigate("ChangePassword", { dt });
+      }
     } else {
       Toast.show("Mã xác thực không chính xác", {
         duration: Toast.durations.LONG,

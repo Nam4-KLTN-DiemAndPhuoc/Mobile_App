@@ -125,7 +125,7 @@ export default function UserScreen(props) {
                   label="Đổi mật khẩu"
                   labelStyle={styles.drawerItemLabel}
                   onPress={() => {
-                    // props.navigation.navigate("InviteAddFriend");
+                    navigation.navigate("ChangePassword");
                   }}
                 />
               </Drawer.Section>

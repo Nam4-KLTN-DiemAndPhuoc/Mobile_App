@@ -19,7 +19,6 @@ export default function ProductDetail() {
   const [itemSelected, setItemSelected] = useState(attributes[0]);
   const { cart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
-
   const [amount, setAmount] = useState(1);
 
   const dispatch = useDispatch();
@@ -44,6 +43,7 @@ export default function ProductDetail() {
         amount: amount,
         cart: cart,
         productId: product.id,
+        attributeId: itemSelected.id,
       };
       dispatch(addCartDetail(data));
     } else {
@@ -51,6 +51,7 @@ export default function ProductDetail() {
         cartDetail: {
           amount: amount,
           cart: null,
+          attributeId: itemSelected.id,
         },
 
         product: product,

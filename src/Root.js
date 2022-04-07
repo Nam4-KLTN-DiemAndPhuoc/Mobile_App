@@ -24,6 +24,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getCart } from "./redux/cartSlice";
+import ChangePassword from "./screens/ChangePassword/ChangePassword";
 
 const Stack = createStackNavigator();
 const Root = () => {
@@ -96,6 +97,14 @@ const Root = () => {
               })}
               name="ConfirmOTP"
               component={ConfirmOTP}
+            />
+
+            <Stack.Screen
+              options={({ navigation }) => ({
+                headerShown: false,
+              })}
+              name="ChangePassword"
+              component={ChangePassword}
             />
 
             <Stack.Screen
