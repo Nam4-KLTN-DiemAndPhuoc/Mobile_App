@@ -10,3 +10,4 @@ export { default as CartScreen } from "./Cart/CartScreen";
 export { default as SearchScreen } from "./Search/SearchScreen";
 export { default as ProductDetail } from "./ProductDetail/ProductDetail";
 export { default as ChangePassword } from "./ChangePassword/ChangePassword";
+export { default as EditProfileUser } from "./User/EditProfileUser";

@@ -40,10 +40,10 @@ export default function ProductDetail() {
   const addCartDetaill = () => {
     if (user) {
       const data = {
-        amount: amount,
-        cart: cart,
         productId: product.id,
+        amount: amount,
         attributeId: itemSelected.id,
+        cart: cart,
       };
       dispatch(addCartDetail(data));
     } else {

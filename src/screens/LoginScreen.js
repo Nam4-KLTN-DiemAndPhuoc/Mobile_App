@@ -32,12 +32,14 @@ export default function LoginScreen({ navigation }) {
       email: email.value,
       password: password.value,
     };
-    dispatch(login(data));
+    const res = await dispatch(login(data));
+    if (res.payload.user) {
+      dispatch(getCart(res.payload.user.id));
+    }
   };
 
   useEffect(() => {
     if (user && !messageError) {
-      dispatch(getCart(user.id));
       navigation.goBack();
     }
     if (messageError) {

@@ -63,7 +63,7 @@ export default function UserScreen(props) {
                   label="Chỉnh sửa thông tin"
                   labelStyle={styles.drawerItemLabel}
                   onPress={() => {
-                    // navigation.navigate("AccountSettingScreen");
+                    navigation.navigate("EditProfileUser");
                   }}
                 />
                 <DrawerItem
@@ -184,12 +184,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottomDrawerSection: {
-    marginBottom: 15,
+    marginBottom: 0,
     borderTopColor: "#ccc",
     borderTopWidth: 0.2,
     paddingTop: 4,
   },
   drawerSection: {
-    marginTop: 15,
+    marginTop: -15,
   },
 });

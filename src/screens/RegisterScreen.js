@@ -22,13 +22,13 @@ const radioButtonsData = [
   {
     id: "1",
     label: "Nam",
-    value: 1,
+    value: true,
     selected: true,
   },
   {
     id: "2",
     label: "Nữ",
-    value: 0,
+    value: false,
     elected: false,
   },
 ];
@@ -40,7 +40,7 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState({ value: "", error: "" });
   const [password_Cfr, setPassword_Cfr] = useState({ value: "", error: "" });
   const [radioButtons, setRadioButtons] = useState(radioButtonsData);
-  const [gender, setGender] = useState(1);
+  const [gender, setGender] = useState(true);
   const dispatch = useDispatch();
 
   const onPressRadioButton = (radioButtonsArray) => {
@@ -77,7 +77,7 @@ export default function RegisterScreen({ navigation }) {
       userName: name.value,
       email: email.value,
       phone: phoneNumber.value,
-      gender: gender.value,
+      gender: gender,
       password: password.value,
     };
     const otp = {

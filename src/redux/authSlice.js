@@ -58,6 +58,20 @@ export const logout = createAsyncThunk("logout", async (params, thunkAPI) => {
   }
 });
 
+export const updateUser = createAsyncThunk(
+  "updateUser",
+  async (params, { rejectWithValue }) => {
+    console.log(params);
+    try {
+      const res = await authApi.updateUser(params);
+      console.log("AAAAAAAAAAAA", res);
+      return res;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -99,6 +113,15 @@ const authSlice = createSlice({
     },
     [refreshToken.rejected]: (state, action) => {
       console.log("Token hết hạn vui lòng đăng nhập lại");
+    },
+
+    // login
+    [updateUser.pending]: (state, action) => {},
+    [updateUser.fulfilled]: (state, action) => {
+      state.user = action.payload;
+    },
+    [updateUser.rejected]: (state, action) => {
+      state.messageError = action.payload;
     },
   },
 });

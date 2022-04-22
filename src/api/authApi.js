@@ -25,5 +25,9 @@ const athApi = {
     const url = `user-service/auth/change-password`;
     return axiosClient.post(url, data);
   },
+  updateUser: (data) => {
+    const url = `user-service/user/update`;
+    return axiosClient.post(url, data);
+  },
 };
 export default athApi;

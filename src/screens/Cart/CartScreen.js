@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -6,7 +7,6 @@ import ItemCartDetail from "../../components/cartDetail/ItemCartDetail";
 import {
   addCartDetail,
   clearCartDetailDefault,
-  getCart,
   getCartDetail,
 } from "../../redux/cartSlice";
 
@@ -17,22 +17,25 @@ export default function CartScreen() {
   const { user, token } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     if (user) {
+      console.log("DDDDDDDDDDDDDDDD", cart);
       dispatch(getCartDetail(cart.id));
     }
   }, [dispatch, user]);
 
   useEffect(() => {
     if (user && cartDetailsDefault.length > 0) {
+      console.log("AAAAAAAAAAAAAAAAAA", cart.id);
       cartDetailsDefault?.map((cartDetail) => {
         const data = {
-          amount: cartDetail.cartDetail.amount,
-          cart: cart,
           productId: cartDetail.product.id,
-          attributeId: cartDetail.cartDetail.attributeId,
+          amount: cartDetail.cartDetail.amount,
+          attributeId: cartDetail?.cartDetail?.attributeId,
+          cart: cart,
         };
         dispatch(addCartDetail(data));
       });
@@ -64,7 +67,13 @@ export default function CartScreen() {
       );
       setTotalPrice(price);
     }
-  }, [dispatch, cartDetails, cartDetailsDefault]);
+  }, [cartDetails, cartDetailsDefault]);
+
+  const handleOrder = () => {
+    if (!user) {
+      navigation.navigate("LoginScreen");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -100,7 +109,17 @@ export default function CartScreen() {
             justifyContent: "center",
           }}
         >
-          <TouchableOpacity style={styles.btnBuy}>
+          <TouchableOpacity
+            style={styles.btnBuy}
+            disabled={
+              cartDetails.length > 0 || cartDetailsDefault.length > 0
+                ? false
+                : true
+            }
+            onPress={() => {
+              handleOrder();
+            }}
+          >
             <Text style={{ padding: 15, color: "#fff", fontWeight: "bold" }}>
               ĐẶT HÀNG
             </Text>

@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/core";
 
 import {
   ConfirmOTP,
+  EditProfileUser,
   LoginScreen,
   ProductDetail,
   RegisterScreen,
@@ -128,6 +129,17 @@ const Root = () => {
               })}
               name="ProductDetail"
               component={ProductDetail}
+            />
+
+            <Stack.Screen
+              options={({ navigation }) => ({
+                title: "THÔNG TIN CÁ NHÂN",
+                headerTitleStyle: {
+                  marginLeft: 30,
+                },
+              })}
+              name="EditProfileUser"
+              component={EditProfileUser}
             />
           </Stack.Navigator>
         </NavigationContainer>

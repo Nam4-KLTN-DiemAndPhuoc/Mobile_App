@@ -9,6 +9,7 @@ const initialState = {
 export const getCart = createAsyncThunk("getCart", async (params, thunkAPI) => {
   try {
     const res = await cartApi.getByUser(params);
+    console.log("BBBBBBBBBBBBBBBBBBBBBBBB", res);
     return res;
   } catch (error) {
     console.log(error);
@@ -107,6 +108,7 @@ const cartSlice = createSlice({
     [getCart.pending]: (state, action) => {},
     [getCart.fulfilled]: (state, action) => {
       state.cart = action.payload;
+      console.log("BBBBBBBBBBBBBBB", state.cart);
     },
     [getCart.rejected]: (state, action) => {},
 
@@ -129,6 +131,7 @@ const cartSlice = createSlice({
       if (p) {
         p.cartDetail.amount = action.payload.cartDetail.amount;
       } else {
+        console.log(action.payload);
         state.cartDetails.push(action.payload);
       }
     },

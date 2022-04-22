@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -12,11 +12,20 @@ import {
   updateCartDetailDefault,
 } from "../../redux/cartSlice";
 import Toast from "react-native-root-toast";
+import attributeApi from "../../api/attributeApi";
 
 export default function ItemCartDetail({ item }) {
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
   const [amount, setAmount] = useState(item?.cartDetail?.amount);
+  const [attribute, setAttribute] = useState({});
+
+  useEffect(async () => {
+    if (item?.cartDetail?.attributeId != null) {
+      const res = await attributeApi.findById(item?.cartDetail?.attributeId);
+      setAttribute(res);
+    }
+  }, []);
 
   const handlerMinus = () => {
     if (amount >= 2) {
@@ -144,8 +153,15 @@ export default function ItemCartDetail({ item }) {
           }}
         />
         <View style={styles.information}>
-          <Text style={{ fontSize: 10, color: "#B1B1B1" }}>ABCDCCC</Text>
           <Text>{item?.product?.name}</Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
+              Size: {attribute?.size}
+            </Text>
+            <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
+              - Số lượng hiện có: {attribute?.amount}
+            </Text>
+          </View>
           <View style={styles.price}>
             <View>
               <Text style={{ color: "#F08F5F" }}>

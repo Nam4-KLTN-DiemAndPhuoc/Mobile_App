@@ -21,7 +21,6 @@ import { findAttributeByProductId } from "../../redux/attributeSlice";
 import { addCartDetail, addCartDetailDefault } from "../../redux/cartSlice";
 import Toast from "react-native-root-toast";
 import SelectBox from "react-native-multi-selectbox";
-import { xor } from "lodash";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -56,7 +55,10 @@ export default function ItemProduct({ item }) {
         amount: amount,
         cart: cart,
         productId: item.product.id,
-        attributeId: attributeSelected.value.id,
+        attributeId:
+          attributeSelected?.value?.id == undefined
+            ? null
+            : attributeSelected?.value?.id,
       };
       dispatch(addCartDetail(data));
     } else {
@@ -64,7 +66,10 @@ export default function ItemProduct({ item }) {
         cartDetail: {
           amount: amount,
           cart: null,
-          attributeId: attributeSelected.value.id,
+          attributeId:
+            attributeSelected?.value?.id == undefined
+              ? null
+              : attributeSelected?.value?.id,
         },
 
         product: item.product,

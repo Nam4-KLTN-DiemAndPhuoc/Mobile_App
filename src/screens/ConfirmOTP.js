@@ -30,6 +30,7 @@ export default function ConfirmOTP({ navigation, route }) {
     const res = await authApi.validateOTP(data);
     if (res == true) {
       if (route.params.data.userName) {
+        console.log("AAAAAAAAA", route.params.data);
         dispatch(register(route.params.data));
         navigation.navigate("Dashboard");
       } else {
