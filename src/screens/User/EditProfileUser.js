@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -12,9 +12,15 @@ import { phoneValidator } from "../../helpers/emailValidator";
 import { nameValidator } from "../../helpers/nameValidator";
 import { updateUser } from "../../redux/authSlice";
 import useLocationForm from "../../hook/useLocationForm";
+import { addAddress, updateAddress } from "../../redux/addressSlice";
 
 export default function EditProfileUser() {
   const { user, token } = useSelector((state) => state.auth);
+  const { address, messageError } = useSelector((state) => state.address);
+  const [addressUser, setAddressUser] = useState(
+    `${address?.street}, ${address?.wards}, ${address?.district}, ${address?.city}`
+  );
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState({ value: user?.email, error: "" });
@@ -30,6 +36,8 @@ export default function EditProfileUser() {
   const [itemSelected, setItemSelected] = useState(user?.gender);
 
   const [editAble, setEditAble] = useState(false);
+
+  const [street, setStreet] = useState(address ? address.street : "");
 
   const { state, onCitySelect, onDistrictSelect, onWardSelect, onSubmit } =
     useLocationForm(false);
@@ -57,6 +65,23 @@ export default function EditProfileUser() {
       return;
     }
 
+    if (!street || !selectedCity || !selectedDistrict || !selectedWard) {
+      Toast.show("Vui lòng nhập đầy đủ địa chỉ", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        containerStyle: {
+          backgroundColor: "#C4C4C4",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
+        },
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
+      return;
+    }
+
     const data = {
       email: email.value,
       userName: userName.value,
@@ -65,6 +90,28 @@ export default function EditProfileUser() {
     };
 
     dispatch(updateUser(data));
+
+    if (address) {
+      const dtAddress = {
+        id: address.id,
+        city: selectedCity.label,
+        district: selectedDistrict.label,
+        wards: selectedWard.label,
+        street: street,
+        user: user,
+      };
+
+      dispatch(updateAddress(dtAddress));
+    } else {
+      const dtAddress = {
+        city: selectedCity.label,
+        district: selectedDistrict.label,
+        wards: selectedWard.label,
+        street: street,
+        user: user,
+      };
+      dispatch(addAddress(dtAddress));
+    }
 
     Toast.show("Cập nhật thành công", {
       duration: Toast.durations.LONG,
@@ -82,6 +129,17 @@ export default function EditProfileUser() {
 
     setEditAble(false);
   };
+
+  useEffect(() => {
+    console.log(address);
+
+    if (address) {
+      const city = cityOptions.filter((city) => city.label == address.city);
+      if (city) {
+        onCitySelect(city);
+      }
+    }
+  }, [address]);
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.view}>
@@ -152,6 +210,107 @@ export default function EditProfileUser() {
         />
       </View>
 
+      {!editAble ? (
+        <View style={styles.view}>
+          <Text style={{ marginLeft: 10 }}>Địa chỉ:</Text>
+          <Text style={styles.textInputAddress}>{addressUser}</Text>
+        </View>
+      ) : (
+        <View>
+          <View style={styles.view}>
+            <Text style={{ marginLeft: 10 }}>Số nhà:</Text>
+            <TextInput
+              label="Số nhà"
+              returnKeyType="next"
+              value={street}
+              onChangeText={(text) => setStreet(text)}
+              editable={editAble}
+              style={[styles.textInput, { marginLeft: 50 }]}
+            />
+          </View>
+
+          <View>
+            <View style={styles.viewAddress}>
+              <Text style={{ marginLeft: 10 }}>Tỉnh/Thành phố:</Text>
+              <View style={styles.pickerAddress}>
+                <Picker
+                  selectedValue={selectedCity?.value}
+                  onValueChange={(itemValue, itemIndex, itemLable) => {
+                    onCitySelect(cityOptions[itemIndex - 1]);
+                    console.log(selectedCity);
+                  }}
+                >
+                  <Picker.Item
+                    style={styles.textItem}
+                    label="Thành phố"
+                    value="thanhpho"
+                  />
+                  {cityOptions.map((city, index) => (
+                    <Picker.Item
+                      style={styles.textItem}
+                      label={city.label}
+                      value={city.value}
+                      key={`cityId_${selectedCity?.value}`}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+
+            <View style={styles.viewAddress}>
+              <Text style={{ marginLeft: 10 }}>Quận/Huyện:</Text>
+              <View style={styles.pickerAddress}>
+                <Picker
+                  selectedValue={selectedDistrict?.value}
+                  onValueChange={(itemValue, itemIndex) => {
+                    onDistrictSelect(districtOptions[itemIndex - 1]);
+                  }}
+                >
+                  <Picker.Item
+                    style={styles.textItem}
+                    label="Quận huyện"
+                    value="quan"
+                  />
+                  {districtOptions.map((district, index) => (
+                    <Picker.Item
+                      style={styles.textItem}
+                      label={district.label}
+                      value={district.value}
+                      key={index}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+            <View style={styles.viewAddress}>
+              <Text style={{ marginLeft: 10 }}>Phường/Xã:</Text>
+              <View style={styles.pickerAddress}>
+                <Picker
+                  selectedValue={selectedWard?.value}
+                  onValueChange={(itemValue, itemIndex) => {
+                    onWardSelect(wardOptions[itemIndex - 1]);
+                  }}
+                >
+                  <Picker.Item
+                    style={styles.textItem}
+                    label="Phường"
+                    value="phuong"
+                  />
+                  {wardOptions.map((ward, index) => (
+                    <Picker.Item
+                      style={styles.textItem}
+                      label={ward.label}
+                      value={ward.value}
+                      key={index}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
+
       {editAble == false ? (
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <TouchableOpacity style={styles.btnEdit} onPress={() => handleEdit()}>
@@ -190,7 +349,7 @@ export default function EditProfileUser() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    marginTop: 20,
   },
   view: {
     flexDirection: "row",
@@ -241,5 +400,23 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: 250,
+  },
+  textInputAddress: {
+    marginLeft: 10,
+    fontSize: 13,
+  },
+  pickerAddress: {
+    marginVertical: 12,
+    width: "60%",
+    backgroundColor: theme.colors.surface,
+    marginLeft: 5,
+    borderRadius: 5,
+    justifyContent: "center",
+    marginBottom: 10,
+    borderColor: "#000",
+  },
+  viewAddress: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

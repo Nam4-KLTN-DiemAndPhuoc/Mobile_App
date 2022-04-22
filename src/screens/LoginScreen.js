@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
 import { getCart } from "../redux/cartSlice";
 import Toast from "react-native-root-toast";
+import { findAddressByUserId } from "../redux/addressSlice";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ export default function LoginScreen({ navigation }) {
     const res = await dispatch(login(data));
     if (res.payload.user) {
       dispatch(getCart(res.payload.user.id));
+      dispatch(findAddressByUserId(res.payload.user.id));
     }
   };
 

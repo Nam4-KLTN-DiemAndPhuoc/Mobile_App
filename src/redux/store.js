@@ -11,7 +11,7 @@ import imageProductSlice from "./imageProductSlice";
 import supplierSlice from "./supplierSlice";
 import attributeSlice from "./attributeSlice";
 import cartSlice from "./cartSlice";
-import logger from "redux-logger";
+import addressSlice from "./addressSlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -25,6 +25,7 @@ const rootReducer = combineReducers({
   suppliers: supplierSlice,
   attribute: attributeSlice,
   cart: cartSlice,
+  address: addressSlice,
 });
 
 const store = configureStore({
