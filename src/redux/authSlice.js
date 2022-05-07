@@ -82,6 +82,7 @@ const authSlice = createSlice({
     [login.fulfilled]: (state, action) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
+      state.messageError = null;
     },
     [login.rejected]: (state, action) => {
       state.messageError = action.payload;

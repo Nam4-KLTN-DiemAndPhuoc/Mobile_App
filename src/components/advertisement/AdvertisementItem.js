@@ -131,11 +131,12 @@ const styles = StyleSheet.create({
 
   textProductName: {
     color: "red",
-    padding: 5,
     fontSize: 18,
     fontWeight: "bold",
     backgroundColor: "#C4C4C4",
     borderRadius: 20,
+    maxWidth: 200,
+    textAlign: "center",
   },
 
   textPrice: {
@@ -150,6 +151,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 60,
+    marginTop: 50,
   },
 });

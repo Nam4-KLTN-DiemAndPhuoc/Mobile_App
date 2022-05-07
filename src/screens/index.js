@@ -11,3 +11,6 @@ export { default as SearchScreen } from "./Search/SearchScreen";
 export { default as ProductDetail } from "./ProductDetail/ProductDetail";
 export { default as ChangePassword } from "./ChangePassword/ChangePassword";
 export { default as EditProfileUser } from "./User/EditProfileUser";
+export { default as InforOrderScreen } from "./Order/InforOrderScreen";
+export { default as PaymentScreen } from "./Order/PaymentScreen";
+export { default as InforOrderHistoryScreen } from "./Order/InforOrderHistoryScreen";

@@ -17,6 +17,7 @@ import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
 import { useDispatch } from "react-redux";
 import Toast from "react-native-root-toast";
 import authApi from "../api/authApi";
+import Apploader from "../components/Apploader";
 
 const radioButtonsData = [
   {
@@ -42,6 +43,7 @@ export default function RegisterScreen({ navigation }) {
   const [radioButtons, setRadioButtons] = useState(radioButtonsData);
   const [gender, setGender] = useState(true);
   const dispatch = useDispatch();
+  const [register, setRegister] = useState(false);
 
   const onPressRadioButton = (radioButtonsArray) => {
     setRadioButtons(radioButtonsArray);
@@ -73,6 +75,8 @@ export default function RegisterScreen({ navigation }) {
       setPhoneNumber({ ...phoneNumber, error: phoneNumberError });
       return;
     }
+
+    setRegister(true);
     const data = {
       userName: name.value,
       email: email.value,
@@ -85,6 +89,7 @@ export default function RegisterScreen({ navigation }) {
     };
     const res = await authApi.sendOTP(otp);
     if (res == true) {
+      setRegister(false);
       Toast.show("Mã xác thực đã được gửi đến email của bạn!", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
@@ -100,6 +105,7 @@ export default function RegisterScreen({ navigation }) {
       });
       navigation.navigate("ConfirmOTP", { data });
     } else {
+      setRegister(false);
       Toast.show("Email đã được đăng kí", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
@@ -196,12 +202,15 @@ export default function RegisterScreen({ navigation }) {
           <Text style={styles.link}>Đăng nhập</Text>
         </TouchableOpacity>
       </View>
+      {register ? <Apploader /> : null}
     </Background>
   );
 }
 
 const styles = StyleSheet.create({
-  body: {},
+  body: {
+    marginTop: 20,
+  },
 
   row: {
     flexDirection: "row",

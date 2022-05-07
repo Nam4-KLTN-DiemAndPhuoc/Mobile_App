@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import SearchHeader from "../../components/header/SearchHeader";
 import ListProductSearch from "../../components/search/ListProductSearch";
 

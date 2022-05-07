@@ -263,6 +263,7 @@ const styles = StyleSheet.create({
   },
   textName: {
     fontWeight: "bold",
+    textAlign: "center",
   },
   textPrice: {
     marginLeft: 5,

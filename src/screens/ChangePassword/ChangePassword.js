@@ -12,11 +12,14 @@ import {
 import authApi from "../../api/authApi";
 import Toast from "react-native-root-toast";
 import { useSelector } from "react-redux";
+import Apploader from "../../components/Apploader";
+import Logo from "../../components/Logo";
 
 export default function ChangePassword({ navigation, route }) {
   const { user } = useSelector((state) => state.auth);
   const [password, setPassword] = useState({ value: "", error: "" });
   const [password_Cfr, setPassword_Cfr] = useState({ value: "", error: "" });
+  const [loader, setLoader] = useState(false);
   const onChangePassword = async () => {
     const passwordError = passwordValidator(password.value);
     const password_CfrError = password_CrfValidator(
@@ -29,9 +32,9 @@ export default function ChangePassword({ navigation, route }) {
       setPassword_Cfr({ ...password_Cfr, error: password_CfrError });
       return;
     }
-
-    console.log(user);
+    setLoader(true);
     if (user) {
+      setLoader(false);
       const data = {
         email: user.email,
         password: password.value,
@@ -52,6 +55,7 @@ export default function ChangePassword({ navigation, route }) {
       });
       navigation.goBack();
     } else {
+      setLoader(false);
       const data = {
         email: route.params.dt.email,
         password: password.value,
@@ -79,6 +83,7 @@ export default function ChangePassword({ navigation, route }) {
     <Background>
       <BackButton goBack={navigation.goBack} />
       <View style={{ marginTop: 100 }}></View>
+      <Logo />
       <Header>ĐỔI MẬT KHẨU</Header>
       <TextInput
         label="Mật khẩu"
@@ -107,6 +112,8 @@ export default function ChangePassword({ navigation, route }) {
       >
         Đổi mật khẩu
       </Button>
+
+      {loader ? <Apploader /> : null}
     </Background>
   );
 }

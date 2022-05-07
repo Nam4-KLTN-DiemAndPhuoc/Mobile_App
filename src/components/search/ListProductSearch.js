@@ -33,6 +33,7 @@ export default function ListProductSearch({ page, setPage }) {
         renderItem={({ item }) => <ItemProduct item={item} />}
         numColumns={2}
         keyExtractor={(item, index) => (key = item.product.id + index)}
+        key={(item, index) => (key = item.product.id + index)}
         onScroll={({ nativeEvent }) => {
           if (isCloseToBottom(nativeEvent)) {
             handleLoad();

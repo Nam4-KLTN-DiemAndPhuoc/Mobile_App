@@ -5,6 +5,7 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   StyleSheet,
+  Text,
   TextInput,
   View,
 } from "react-native";
@@ -29,9 +30,10 @@ import {
 export default function SearchHeader({ pageSearch, categorySelect }) {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
-  const [page, setPage] = useState(pageSearch);
+  const [page, setPage] = useState(1);
   const handleChangeText = (text) => {
     setText(text);
+    setPage(1);
   };
 
   const [itemSelected, setItemSelected] = useState("danhmuc");
@@ -39,6 +41,19 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
   const [itemSort, setItemSort] = useState("price");
 
   const { category } = useSelector((state) => state.category);
+  const { cartDetails, cartDetailsDefault } = useSelector(
+    (state) => state.cart
+  );
+
+  const [badge, setBadge] = useState(0);
+
+  useEffect(() => {
+    if (cartDetails?.length > 0) {
+      setBadge(cartDetails?.length);
+    } else {
+      setBadge(cartDetailsDefault?.length);
+    }
+  }, [dispatch, cartDetails, cartDetailsDefault]);
 
   const handleSearchCategory = (itemValue) => {
     setItemSelected(itemValue);
@@ -58,12 +73,18 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
   }, [text]);
 
   useEffect(() => {
-    handleSearch(text, itemSelected, pageSearch, itemSort);
+    if (pageSearch > 1) {
+      setPage(page + 1);
+      console.log(text, itemSelected, page, itemSort);
+      handleSearch(text, itemSelected, page, itemSort);
+    }
   }, [pageSearch]);
 
   const handleSort = (itemValue) => {
-    dispatch(clearListProductSearch());
+    setPage(1);
     setItemSort(itemValue);
+    dispatch(clearListProductSearch());
+
     handleSearch(text, itemSelected, 1, itemSort);
   };
 
@@ -71,6 +92,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
     setItemSelected(categorySelect !== undefined ? categorySelect : "danhmuc");
 
     if (categorySelect !== undefined) {
+      setPage(1);
       dispatch(clearListProductSearch());
       handleSearch(
         text,
@@ -79,10 +101,13 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
         itemSort
       );
     }
+
+    return function cleanup() {};
   }, [categorySelect]);
 
   const handleSearch = (valueSearch, category, page, itemSort) => {
     if (valueSearch === "" && category === "danhmuc" && itemSort === "price") {
+      console.log(1);
       const data = {
         page: page,
         limit: 10,
@@ -93,6 +118,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category === "danhmuc" &&
       itemSort === "price"
     ) {
+      console.log(2);
       const data = {
         name: valueSearch,
         page: page,
@@ -104,6 +130,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort === "price"
     ) {
+      console.log(3);
       const data = {
         id: category,
         page: page,
@@ -115,6 +142,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort === "price"
     ) {
+      console.log(4);
       const data = {
         id: category,
         name: valueSearch,
@@ -127,6 +155,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category === "danhmuc" &&
       itemSort !== "price"
     ) {
+      console.log(5);
       const data = {
         page: page,
         limit: 10,
@@ -142,6 +171,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category === "danhmuc" &&
       itemSort !== "price"
     ) {
+      console.log(6);
       const data = {
         name: valueSearch,
         page: page,
@@ -158,6 +188,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort !== "price"
     ) {
+      console.log(7);
       const data = {
         id: category,
         page: page,
@@ -174,6 +205,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort !== "price"
     ) {
+      console.log(8);
       const data = {
         id: category,
         name: valueSearch,
@@ -199,13 +231,14 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
             style={styles.textInput}
             placeholder="Tìm kiếm"
           />
-          <TouchableOpacity>
+          <TouchableOpacity style={styles.cart}>
             <Ionicons
               style={styles.iconCart}
               name="ios-cart-outline"
               size={24}
               color="#fff"
             />
+            <Text style={styles.badge}> {badge == 0 ? "" : badge} </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -213,7 +246,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       <View style={styles.filter}>
         <View style={styles.filterPrice}>
           <Picker
-            selectedValue={itemSelected}
+            selectedValue={itemSort}
             onValueChange={(itemValue, itemIndex) => {
               handleSort(itemValue);
             }}
@@ -221,12 +254,12 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
             <Picker.Item style={styles.textItem} label="Giá" value="price" />
             <Picker.Item
               style={styles.textItem}
-              label="Tăng dần"
+              label="Giảm dần"
               value={true}
             />
             <Picker.Item
               style={styles.textItem}
-              label="Giảm dần"
+              label="Tăng dần"
               value={false}
             />
           </Picker>
@@ -246,7 +279,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
             {category?.map((item, index) => (
               <Picker.Item
                 style={styles.textItem}
-                key={index}
+                key={index + item.id}
                 label={item.name}
                 value={item.id}
               />
@@ -306,5 +339,20 @@ const styles = StyleSheet.create({
   },
   textItem: {
     fontSize: 14,
+  },
+  badge: {
+    position: "absolute",
+    top: -1,
+    right: 10,
+    padding: 3,
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    color: "red",
+    fontWeight: "bold",
+  },
+  cart: {
+    justifyContent: "center",
+
+    height: 50,
   },
 });

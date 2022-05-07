@@ -17,6 +17,10 @@ const athApi = {
     const url = `user-service/auth/generateOTP`;
     return axiosClient.post(url, data);
   },
+  sendOTPRegister: (data) => {
+    const url = `user-service/auth/generateOTP-regíter`;
+    return axiosClient.post(url, data);
+  },
   validateOTP: (data) => {
     const url = `user-service/auth/validateOTP`;
     return axiosClient.post(url, data);

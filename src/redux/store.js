@@ -12,6 +12,7 @@ import supplierSlice from "./supplierSlice";
 import attributeSlice from "./attributeSlice";
 import cartSlice from "./cartSlice";
 import addressSlice from "./addressSlice";
+import orderSlice from "./orderSlice";
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   attribute: attributeSlice,
   cart: cartSlice,
   address: addressSlice,
+  orders: orderSlice,
 });
 
 const store = configureStore({

@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "KLTN_MobileApp",
+    "name": "SHOP DP",
     "slug": "KLTN_MobileApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/SHOPDP2.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/SHOPDP2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,9 +21,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/SHOPDP2.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.tdphuoc77.KLTN_MobileApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

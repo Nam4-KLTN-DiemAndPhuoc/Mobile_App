@@ -67,22 +67,24 @@ export default function Dashboard({ navigation }) {
   };
 
   return (
-    <View style={{ backgroundColor: "#C4C4C4" }}>
-      <HomeHeader />
+    <>
+      <View style={{ backgroundColor: "#C4C4C4" }}>
+        <HomeHeader />
 
-      <View style={styles.body}>
-        <FlatList
-          data={data}
-          renderItem={({ item }) => render(item)}
-          onScroll={({ nativeEvent }) => {
-            if (isCloseToBottom(nativeEvent)) {
-              handleLoad();
-            }
-          }}
-          keyExtractor={(item, index) => (key = item.key)}
-        />
+        <View style={styles.body}>
+          <FlatList
+            data={data}
+            renderItem={({ item }) => render(item)}
+            onScroll={({ nativeEvent }) => {
+              if (isCloseToBottom(nativeEvent)) {
+                handleLoad();
+              }
+            }}
+            keyExtractor={(item, index) => (key = item.key)}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 

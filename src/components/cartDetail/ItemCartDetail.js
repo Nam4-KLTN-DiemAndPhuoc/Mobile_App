@@ -37,6 +37,7 @@ export default function ItemCartDetail({ item }) {
           amount: amount - 1,
           cart: item.cartDetail.cart,
           productId: item.cartDetail.productId,
+          attributeId: item.cartDetail.attributeId,
         };
 
         dispatch(updateCartDetail(data));
@@ -45,6 +46,7 @@ export default function ItemCartDetail({ item }) {
           cartDetail: {
             amount: amount - 1,
             cart: null,
+            attributeId: item.cartDetail.attributeId,
           },
           product: item.product,
         };
@@ -76,6 +78,7 @@ export default function ItemCartDetail({ item }) {
         amount: Number(amount) + 1,
         cart: item.cartDetail.cart,
         productId: item.cartDetail.productId,
+        attributeId: item.cartDetail.attributeId,
       };
       dispatch(updateCartDetail(data));
     } else {
@@ -83,6 +86,7 @@ export default function ItemCartDetail({ item }) {
         cartDetail: {
           amount: Number(amount) + 1,
           cart: null,
+          attributeId: item.cartDetail.attributeId,
         },
         product: item.product,
       };
@@ -139,56 +143,101 @@ export default function ItemCartDetail({ item }) {
         <FontAwesome5 name="trash-alt" size={24} color="black" />
       </TouchableOpacity>
 
-      <View style={styles.product}>
-        <Image
-          source={{
-            uri: item?.product?.avatar,
-          }}
-          style={{
-            width: 70,
-            height: 100,
-            borderRadius: 10,
-            marginTop: 5,
-            marginBottom: 5,
-          }}
-        />
-        <View style={styles.information}>
-          <Text>{item?.product?.name}</Text>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
-              Size: {attribute?.size}
-            </Text>
-            <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
-              - Số lượng hiện có: {attribute?.amount}
-            </Text>
-          </View>
-          <View style={styles.price}>
-            <View>
-              <Text style={{ color: "#F08F5F" }}>
-                {item?.product?.price} VNĐ
+      {!item?.product?.deletedAt && attribute.amount > 0 ? (
+        <View style={styles.product}>
+          <Image
+            source={{
+              uri: item?.product?.avatar,
+            }}
+            style={{
+              width: 70,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 5,
+              marginBottom: 5,
+            }}
+          />
+          <View style={styles.information}>
+            <Text>{item?.product?.name}</Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
+                Size: {attribute?.size}
+              </Text>
+              <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
+                - Số lượng hiện có: {attribute?.amount}
               </Text>
             </View>
+            <View style={styles.price}>
+              <View>
+                <Text style={{ color: "#F08F5F" }}>
+                  {item?.product?.price} VNĐ
+                </Text>
+              </View>
 
-            <View style={styles.amount}>
-              <TouchableOpacity
-                style={styles.minus}
-                onPress={() => handlerMinus()}
-              >
-                <AntDesign name="minus" size={24} color="black" />
-              </TouchableOpacity>
-              <TextInput
-                value={`${amount}`}
-                keyboardType="numeric"
-                style={{ padding: 10, color: "#000" }}
-                editable={false}
-              />
-              <TouchableOpacity style={styles.add} onPress={handlerAdd}>
-                <Ionicons name="add" size={24} color="black" />
-              </TouchableOpacity>
+              <View style={styles.amount}>
+                <TouchableOpacity
+                  style={styles.minus}
+                  onPress={() => handlerMinus()}
+                >
+                  <AntDesign name="minus" size={24} color="black" />
+                </TouchableOpacity>
+                <TextInput
+                  value={`${amount}`}
+                  keyboardType="numeric"
+                  style={{ padding: 10, color: "#000" }}
+                  editable={false}
+                />
+                <TouchableOpacity style={styles.add} onPress={handlerAdd}>
+                  <Ionicons name="add" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.product}>
+          <Image
+            source={{
+              uri: item?.product?.avatar,
+            }}
+            style={{
+              width: 70,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 5,
+              marginBottom: 5,
+            }}
+          />
+          <View style={[styles.information, {}]}>
+            <Text style={{ color: "#B1B1B1" }}>{item?.product?.name}</Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
+                Size: {attribute?.size}
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "#F08F5F",
+                  marginTop: 10,
+                  fontWeight: "bold",
+                }}
+              >
+                Trạng thái: Hết hàng
+              </Text>
+            </View>
+
+            <View style={styles.price}>
+              <View>
+                <Text style={{ color: "#B1B1B1" }}>
+                  Giá: {item?.product?.price} VNĐ
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 }

@@ -44,14 +44,15 @@ export default function CartScreen() {
 
     var price = 0;
     if (user) {
-      cartDetails?.map(
-        (cartDetail) =>
-          (price =
+      cartDetails?.map((cartDetail) => {
+        if (!cartDetail.product.deletedAt) {
+          price =
             price +
             cartDetail?.cartDetail.amount *
               (cartDetail?.product.price -
-                cartDetail?.product.discount * cartDetail?.product.price))
-      );
+                cartDetail?.product.discount * cartDetail?.product.price);
+        }
+      });
 
       setTotalPrice(price);
     }
@@ -72,6 +73,24 @@ export default function CartScreen() {
   const handleOrder = () => {
     if (!user) {
       navigation.navigate("LoginScreen");
+    } else {
+      if (cartDetails.length > 0) {
+        navigation.navigate("InforOrderScreen");
+      } else {
+        Toast.show("Bạn chưa có bất kì sản phẩm nào trong giỏ hàng", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+          containerStyle: {
+            backgroundColor: "#C4C4C4",
+            borderRadius: 200,
+            marginBottom: 300,
+            paddingHorizontal: 20,
+            shadowColor: "#e6e6e6",
+            shadowOpacity: 0.5,
+          },
+          textStyle: { color: "#000", fontWeight: "bold" },
+        });
+      }
     }
   };
 
@@ -112,7 +131,7 @@ export default function CartScreen() {
           <TouchableOpacity
             style={styles.btnBuy}
             disabled={
-              cartDetails.length > 0 || cartDetailsDefault.length > 0
+              cartDetails?.length > 0 || cartDetailsDefault?.length > 0
                 ? false
                 : true
             }

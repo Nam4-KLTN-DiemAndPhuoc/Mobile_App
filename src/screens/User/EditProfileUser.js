@@ -130,16 +130,6 @@ export default function EditProfileUser() {
     setEditAble(false);
   };
 
-  useEffect(() => {
-    console.log(address);
-
-    if (address) {
-      const city = cityOptions.filter((city) => city.label == address.city);
-      if (city) {
-        onCitySelect(city);
-      }
-    }
-  }, [address]);
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.view}>

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import addressApi from "../api/addressApi";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   address: null,

@@ -29,12 +29,14 @@ const productApi = {
   findByNameAsc: (data) => {
     const { name, page, limit } = data;
     const url = `product-service/product/search/asc?name=${name}&page=${page}&limit=${limit}`;
+    console.log(url);
     return axiosClient.get(url);
   },
 
   findByNameDesc: (data) => {
     const { name, page, limit } = data;
     const url = `product-service/product/search/desc?name=${name}&page=${page}&limit=${limit}`;
+    console.log(url);
     return axiosClient.get(url);
   },
 

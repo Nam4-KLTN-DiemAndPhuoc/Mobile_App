@@ -8,9 +8,12 @@ import { emailValidator } from "../helpers/emailValidator";
 import { View } from "react-native";
 import authApi from "../api/authApi";
 import Toast from "react-native-root-toast";
+import Logo from "../components/Logo";
+import Apploader from "../components/Apploader";
 
 export default function ResetPasswordScreen({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
+  const [loader, setLoader] = useState(false);
 
   const sendResetPasswordEmail = async () => {
     const emailError = emailValidator(email.value);
@@ -19,14 +22,17 @@ export default function ResetPasswordScreen({ navigation }) {
       return;
     }
 
+    setLoader(true);
+
     const data = {
       email: email.value,
     };
     const otp = {
       email: email.value,
     };
-    const res = await authApi.sendOTP(otp);
+    const res = await authApi.sendOTPRegister(otp);
     if (res == true) {
+      setLoader(false);
       Toast.show("Mã xác thực đã được gửi đến email của bạn!", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
@@ -42,7 +48,8 @@ export default function ResetPasswordScreen({ navigation }) {
       });
       navigation.navigate("ConfirmOTP", { data });
     } else {
-      Toast.show("Tài khoản không tồn", {
+      setLoader(false);
+      Toast.show("Tài khoản không tồn tại", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
         containerStyle: {
@@ -62,6 +69,7 @@ export default function ResetPasswordScreen({ navigation }) {
     <Background>
       <BackButton goBack={navigation.goBack} />
       <View style={{ marginTop: 100 }}></View>
+      <Logo />
       <Header>TÌM KIẾM TÀI KHOẢN</Header>
       <TextInput
         label="Email"
@@ -82,6 +90,7 @@ export default function ResetPasswordScreen({ navigation }) {
       >
         Tìm tài khoản
       </Button>
+      {loader ? <Apploader /> : null}
     </Background>
   );
 }

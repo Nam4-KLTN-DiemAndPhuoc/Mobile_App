@@ -11,11 +11,13 @@ import { useDispatch } from "react-redux";
 import { register, validateOTP } from "../redux/authSlice";
 import authApi from "../api/authApi";
 import Toast from "react-native-root-toast";
+import Apploader from "../components/Apploader";
 
 export default function ConfirmOTP({ navigation, route }) {
   const dispatch = useDispatch();
 
   const [otp, setOTP] = useState({ value: "", error: "" });
+  const [loader, setLoader] = useState(false);
 
   const validator = async () => {
     const otpError = otpValidator(otp.value);
@@ -23,12 +25,14 @@ export default function ConfirmOTP({ navigation, route }) {
       setOTP({ ...otp, error: otpError });
       return;
     }
+    setLoader(true);
     const data = {
       otp: otp.value,
       email: route.params.data.email,
     };
     const res = await authApi.validateOTP(data);
     if (res == true) {
+      setLoader(false);
       if (route.params.data.userName) {
         console.log("AAAAAAAAA", route.params.data);
         dispatch(register(route.params.data));
@@ -40,6 +44,7 @@ export default function ConfirmOTP({ navigation, route }) {
         navigation.navigate("ChangePassword", { dt });
       }
     } else {
+      setLoader(false);
       Toast.show("Mã xác thực không chính xác", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
@@ -61,7 +66,7 @@ export default function ConfirmOTP({ navigation, route }) {
       <BackButton goBack={navigation.goBack} />
       <View style={styles.body}></View>
       <Logo />
-      <Header>XÁC THỰC ĐĂNG KÝ</Header>
+      <Header>XÁC THỰC OTP</Header>
       <TextInput
         label="mã xác nhận"
         returnKeyType="done"
@@ -70,11 +75,13 @@ export default function ConfirmOTP({ navigation, route }) {
         error={!!otp.error}
         errorText={otp.error}
         autoCapitalize="none"
+        keyboardType="phone-pad"
         description="Nhập mã xác nhận được gửi qua mail đăng ký của bạn"
       />
       <Button mode="contained" onPress={validator} style={{ marginTop: 16 }}>
         Xác nhận
       </Button>
+      {loader ? <Apploader /> : null}
     </Background>
   );
 }
