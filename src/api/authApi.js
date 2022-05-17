@@ -33,5 +33,16 @@ const athApi = {
     const url = `user-service/user/update`;
     return axiosClient.post(url, data);
   },
+  uploadFile: (data) => {
+    const url = `user-service/auth/upload`;
+    return axiosClient.post(url, data);
+  },
+  generateUploadURL: (data) => {
+    const url = `user-service/auth/generateUploadURL?name=$${
+      data.split(".")[0]
+    }`;
+
+    return axiosClient.get(url);
+  },
 };
 export default athApi;

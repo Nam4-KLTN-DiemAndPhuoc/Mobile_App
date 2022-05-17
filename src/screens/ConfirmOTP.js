@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import Background from "../components/Background";
-import BackButton from "../components/BackButton";
-import Logo from "../components/Logo";
-import Header from "../components/Header";
-import TextInput from "../components/TextInput";
-import Button from "../components/Button";
-import { otpValidator } from "../helpers/oTPValidator";
 import { StyleSheet, View } from "react-native";
-import { useDispatch } from "react-redux";
-import { register, validateOTP } from "../redux/authSlice";
-import authApi from "../api/authApi";
 import Toast from "react-native-root-toast";
-import Apploader from "../components/Apploader";
+import { useDispatch } from "react-redux";
+import authApi from "../api/authApi";
+import Apploader2 from "../components/Apploader2";
+import BackButton from "../components/BackButton";
+import Background from "../components/Background";
+import Button from "../components/Button";
+import Header from "../components/Header";
+import Logo from "../components/Logo";
+import TextInput from "../components/TextInput";
+import { otpValidator } from "../helpers/oTPValidator";
+import { register } from "../redux/authSlice";
 
 export default function ConfirmOTP({ navigation, route }) {
   const dispatch = useDispatch();
@@ -34,7 +34,6 @@ export default function ConfirmOTP({ navigation, route }) {
     if (res == true) {
       setLoader(false);
       if (route.params.data.userName) {
-        console.log("AAAAAAAAA", route.params.data);
         dispatch(register(route.params.data));
         navigation.navigate("Dashboard");
       } else {
@@ -81,7 +80,7 @@ export default function ConfirmOTP({ navigation, route }) {
       <Button mode="contained" onPress={validator} style={{ marginTop: 16 }}>
         Xác nhận
       </Button>
-      {loader ? <Apploader /> : null}
+      {loader ? <Apploader2 /> : null}
     </Background>
   );
 }

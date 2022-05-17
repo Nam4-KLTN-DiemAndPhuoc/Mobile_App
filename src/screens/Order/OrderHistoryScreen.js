@@ -15,6 +15,11 @@ export default function OrderHistoryScreen() {
   }, []);
   return (
     <View>
+      {!orders || orders?.length == 0 ? (
+        <View style={{ alignItems: "center", marginTop: 20 }}>
+          <Text style={{ fontSize: 16 }}>Bạn chưa có hóa đơn nào</Text>
+        </View>
+      ) : null}
       <FlatList
         data={orders}
         renderItem={({ item }) => <ItemOrderHistory item={item} />}

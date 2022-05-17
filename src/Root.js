@@ -13,6 +13,7 @@ import { getAll } from "./redux/productListSlice";
 import { findAll } from "./redux/productSearchSlice";
 import { useNavigation } from "@react-navigation/core";
 import { Text, View } from "react-native";
+import { getCart } from "../src/redux/cartSlice";
 
 import {
   ConfirmOTP,
@@ -25,11 +26,13 @@ import {
   RegisterScreen,
   ResetPasswordScreen,
   UserScreen,
+  CommentScreen,
 } from "./screens";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { getCart } from "./redux/cartSlice";
 import ChangePassword from "./screens/ChangePassword/ChangePassword";
+import { findAddressByUserId } from "./redux/addressSlice";
+import { findOrdersByUserId } from "./redux/orderSlice";
 
 const Stack = createStackNavigator();
 const Root = () => {
@@ -51,7 +54,13 @@ const Root = () => {
   }, [dispatch, cartDetails, cartDetailsDefault]);
 
   useEffect(async () => {
-    dispatch(refreshToken());
+    const res = await dispatch(refreshToken());
+
+    if (res.payload?.user) {
+      dispatch(getCart(res.payload?.user.id));
+      dispatch(findAddressByUserId(res.payload?.user.id));
+      dispatch(findOrdersByUserId(res.payload?.user.id));
+    }
     dispatch(advertisement());
 
     const paging = {
@@ -158,7 +167,7 @@ const Root = () => {
                         fontWeight: "bold",
                       }}
                     >
-                      {badge == 0 ? "" : badge}
+                      {badge == 0 ? "0" : badge}
                     </Text>
                   </View>
                 ),
@@ -206,6 +215,14 @@ const Root = () => {
               })}
               name="InforOrderHistoryScreen"
               component={InforOrderHistoryScreen}
+            />
+            <Stack.Screen
+              options={({ navigation }) => ({
+                title: "Đánh giá sản phẩm",
+                headerTitleAlign: "center",
+              })}
+              name="CommentScreen"
+              component={CommentScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>

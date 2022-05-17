@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
 import Toast from "react-native-root-toast";
 import { useDispatch, useSelector } from "react-redux";
-import Apploader from "../components/Apploader";
+import Apploader2 from "../components/Apploader2";
 import Background from "../components/Background";
 import Button from "../components/Button";
 import Logo from "../components/Logo";
@@ -39,20 +39,17 @@ export default function LoginScreen({ navigation }) {
     setLoginPending(true);
     const res = await dispatch(login(data));
     if (res.payload.user) {
-      dispatch(getCart(res.payload.user.id));
       dispatch(findAddressByUserId(res.payload.user.id));
       dispatch(findOrdersByUserId(res.payload.user.id));
+      dispatch(getCart(res.payload.user.id));
+      setTimeout(() => {
+        setLoginPending(false);
+        navigation.goBack();
+      }, 2000);
     }
   };
 
   useEffect(() => {
-    if (user && !messageError) {
-      setTimeout(() => {
-        setLoginPending(false);
-      }, 2000);
-
-      navigation.goBack();
-    }
     if (messageError) {
       setLoginPending(false);
       Toast.show(messageError, {
@@ -69,7 +66,7 @@ export default function LoginScreen({ navigation }) {
         textStyle: { color: "#000", fontWeight: "bold" },
       });
     }
-  }, [user, messageError]);
+  }, [messageError]);
 
   return (
     <>
@@ -114,7 +111,7 @@ export default function LoginScreen({ navigation }) {
             <Text style={styles.link}> Đăng ký</Text>
           </TouchableOpacity>
         </View>
-        {loginPending ? <Apploader /> : null}
+        {loginPending ? <Apploader2 /> : null}
       </Background>
     </>
   );

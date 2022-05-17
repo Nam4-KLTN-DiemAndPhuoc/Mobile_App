@@ -22,14 +22,12 @@ export default function CartScreen() {
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     if (user) {
-      console.log("DDDDDDDDDDDDDDDD", cart);
       dispatch(getCartDetail(cart.id));
     }
   }, [dispatch, user]);
 
   useEffect(() => {
     if (user && cartDetailsDefault.length > 0) {
-      console.log("AAAAAAAAAAAAAAAAAA", cart.id);
       cartDetailsDefault?.map((cartDetail) => {
         const data = {
           productId: cartDetail.product.id,
@@ -68,13 +66,13 @@ export default function CartScreen() {
       );
       setTotalPrice(price);
     }
-  }, [cartDetails, cartDetailsDefault]);
+  }, [cartDetails, cartDetailsDefault, cart]);
 
   const handleOrder = () => {
     if (!user) {
       navigation.navigate("LoginScreen");
     } else {
-      if (cartDetails.length > 0) {
+      if (cartDetails?.length > 0) {
         navigation.navigate("InforOrderScreen");
       } else {
         Toast.show("Bạn chưa có bất kì sản phẩm nào trong giỏ hàng", {
@@ -97,6 +95,11 @@ export default function CartScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
+        {cartDetails?.length == 0 && cartDetailsDefault == 0 ? (
+          <View style={{ alignItems: "center", marginTop: 20, fontSize: 16 }}>
+            <Text>Bạn chưa thêm sản phẩm nào vào giỏ hàng</Text>
+          </View>
+        ) : null}
         {user ? (
           <FlatList
             data={cartDetails}

@@ -75,9 +75,7 @@ function useLocationForm(shouldFetchInitialLocation) {
 
   useEffect(() => {
     (async function () {
-      console.log("VVVVVVVVV");
       if (!selectedCity) return;
-      console.log("VVVVVVVVV111");
       const options = await fetchLocationOptions(
         FETCH_TYPES.DISTRICTS,
         selectedCity.value
@@ -99,7 +97,6 @@ function useLocationForm(shouldFetchInitialLocation) {
 
   function onCitySelect(option) {
     if (option !== selectedCity) {
-      console.log("BBBBBBBBBBBBBB");
       setState({
         ...state,
         districtOptions: [],

@@ -12,7 +12,7 @@ import {
 import authApi from "../../api/authApi";
 import Toast from "react-native-root-toast";
 import { useSelector } from "react-redux";
-import Apploader from "../../components/Apploader";
+import Apploader2 from "../../components/Apploader2";
 import Logo from "../../components/Logo";
 
 export default function ChangePassword({ navigation, route }) {
@@ -113,7 +113,7 @@ export default function ChangePassword({ navigation, route }) {
         Đổi mật khẩu
       </Button>
 
-      {loader ? <Apploader /> : null}
+      {loader ? <Apploader2 /> : null}
     </Background>
   );
 }

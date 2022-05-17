@@ -1,14 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -75,7 +68,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
   useEffect(() => {
     if (pageSearch > 1) {
       setPage(page + 1);
-      console.log(text, itemSelected, page, itemSort);
       handleSearch(text, itemSelected, page, itemSort);
     }
   }, [pageSearch]);
@@ -107,7 +99,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
 
   const handleSearch = (valueSearch, category, page, itemSort) => {
     if (valueSearch === "" && category === "danhmuc" && itemSort === "price") {
-      console.log(1);
       const data = {
         page: page,
         limit: 10,
@@ -118,7 +109,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category === "danhmuc" &&
       itemSort === "price"
     ) {
-      console.log(2);
       const data = {
         name: valueSearch,
         page: page,
@@ -130,7 +120,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort === "price"
     ) {
-      console.log(3);
       const data = {
         id: category,
         page: page,
@@ -142,7 +131,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort === "price"
     ) {
-      console.log(4);
       const data = {
         id: category,
         name: valueSearch,
@@ -155,7 +143,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category === "danhmuc" &&
       itemSort !== "price"
     ) {
-      console.log(5);
       const data = {
         page: page,
         limit: 10,
@@ -171,7 +158,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category === "danhmuc" &&
       itemSort !== "price"
     ) {
-      console.log(6);
       const data = {
         name: valueSearch,
         page: page,
@@ -188,7 +174,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort !== "price"
     ) {
-      console.log(7);
       const data = {
         id: category,
         page: page,
@@ -205,7 +190,6 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
       category !== "danhmuc" &&
       itemSort !== "price"
     ) {
-      console.log(8);
       const data = {
         id: category,
         name: valueSearch,
@@ -238,7 +222,7 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
               size={24}
               color="#fff"
             />
-            <Text style={styles.badge}> {badge == 0 ? "" : badge} </Text>
+            <Text style={styles.badge}> {badge == 0 ? "0" : badge} </Text>
           </TouchableOpacity>
         </View>
       </View>

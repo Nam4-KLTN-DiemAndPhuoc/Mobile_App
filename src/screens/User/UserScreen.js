@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { Drawer, useTheme } from "react-native-paper";
@@ -13,24 +13,32 @@ import { responsiveFontSize } from "react-native-responsive-dimensions";
 import { logout } from "../../redux/authSlice";
 import { useNavigation } from "@react-navigation/core";
 import { clearCartDetail } from "../../redux/cartSlice";
+import Apploader from "../../components/Apploader";
+import { clearOrders } from "../../redux/orderSlice";
 export default function UserScreen(props) {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const theme = useTheme();
   const navigation = useNavigation();
+  const [loader, setLoader] = useState(false);
 
   const handleLogout = () => {
     Alert.alert("Thông báo", "Bạn muốn đăng xuất ?", [
       {
-        text: "Cancel",
+        text: "Hủy",
         style: "cancel",
       },
       {
-        text: "OK",
+        text: "Đồng ý",
         onPress: () => {
+          setLoader(true);
           dispatch(logout());
           dispatch(clearCartDetail());
-          navigation.navigate("Dashboard");
+          dispatch(clearOrders());
+          setTimeout(() => {
+            setLoader(false);
+            navigation.navigate("Dashboard");
+          }, 1500);
         },
       },
     ]);
@@ -83,7 +91,7 @@ export default function UserScreen(props) {
                   label="Giỏ hàng"
                   labelStyle={styles.drawerItemLabel}
                   onPress={() => {
-                    // navigation.navigate("ProfileUserScreen");
+                    navigation.navigate("CartScreen");
                   }}
                 />
 
@@ -104,7 +112,7 @@ export default function UserScreen(props) {
                   label="Đơn hàng đã mua"
                   labelStyle={styles.drawerItemLabel}
                   onPress={() => {
-                    // props.navigation.navigate("InviteAddFriend");
+                    navigation.navigate("OrderHistoryScreen");
                   }}
                 />
 
@@ -170,6 +178,8 @@ export default function UserScreen(props) {
           />
         </Drawer.Section>
       )}
+
+      {loader ? <Apploader /> : null}
     </View>
   );
 }

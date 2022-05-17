@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
@@ -9,10 +8,6 @@ export default function InforOrderHistoryScreen({ route }) {
   const { user } = useSelector((state) => state.auth);
   const { address } = useSelector((state) => state.address);
   const [orderDetails, setOrderDeatils] = useState([]);
-
-  const navigation = useNavigation();
-
-  // console.log(route.params.data.id);
 
   useEffect(async () => {
     const res = await orderApi.getOrderDetailsByOrder(route.params.data.id);
@@ -36,7 +31,13 @@ export default function InforOrderHistoryScreen({ route }) {
         <View style={{ marginLeft: 10 }}>
           <View style={styles.information}>
             <Text style={styles.textInfor}>
-              Mã Đơn Hàng: {route.params.data.codeOrder}{" "}
+              Mã Đơn Hàng: {route.params.data.totalPrice}
+              {" VNĐ"}
+            </Text>
+          </View>
+          <View style={styles.information}>
+            <Text style={styles.textInfor}>
+              Tổng tiền: {route.params.data.codeOrder}{" "}
             </Text>
           </View>
 

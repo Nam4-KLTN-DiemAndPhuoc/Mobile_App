@@ -141,7 +141,42 @@ export default function ItemProduct({ item }) {
         </View>
 
         <View style={styles.price}>
-          <Text style={styles.textPrice}> {item.product.price} VNĐ</Text>
+          {item.product.discount > 0 ? (
+            <Text
+              style={{
+                textDecorationLine: "line-through",
+                textDecorationStyle: "solid",
+                color: "rgba(0,0,0,0.3)",
+                marginLeft: 10,
+              }}
+            >
+              {item.product.price} VNĐ
+            </Text>
+          ) : (
+            <Text></Text>
+          )}
+
+          {item.product.point / 2 != 0 ? (
+            <Text style={{ marginRight: 5, marginBottom: 4 }}>
+              {" "}
+              {item.product.point / 2}{" "}
+              <Image
+                source={{
+                  uri: "https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true",
+                }}
+                style={{ marginLeft: 10, width: 20, height: 20 }}
+              />
+            </Text>
+          ) : null}
+        </View>
+
+        <View style={styles.price}>
+          <Text style={styles.textPrice}>
+            {" "}
+            {item.product.price -
+              item.product.price * item.product.discount}{" "}
+            VNĐ
+          </Text>
           <TouchableOpacity onPress={() => openModal()}>
             <FontAwesome
               style={styles.cartIcon}
@@ -233,7 +268,7 @@ export default function ItemProduct({ item }) {
 }
 const styles = StyleSheet.create({
   container: {
-    height: 230,
+    height: 240,
     width: "45%",
     backgroundColor: "white",
     marginTop: 10,
@@ -243,7 +278,7 @@ const styles = StyleSheet.create({
   imageItem: {
     marginTop: 10,
     marginLeft: 5,
-    height: 150,
+    height: 130,
     width: "90%",
     borderRadius: 10,
   },

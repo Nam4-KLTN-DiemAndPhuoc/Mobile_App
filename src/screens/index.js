@@ -14,3 +14,4 @@ export { default as EditProfileUser } from "./User/EditProfileUser";
 export { default as InforOrderScreen } from "./Order/InforOrderScreen";
 export { default as PaymentScreen } from "./Order/PaymentScreen";
 export { default as InforOrderHistoryScreen } from "./Order/InforOrderHistoryScreen";
+export { default as CommentScreen } from "./Comment/CommentScreen";

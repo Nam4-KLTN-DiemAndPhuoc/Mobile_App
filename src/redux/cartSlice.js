@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import cartApi from "../api/cartApi";
 
@@ -9,7 +10,7 @@ const initialState = {
 export const getCart = createAsyncThunk("getCart", async (params, thunkAPI) => {
   try {
     const res = await cartApi.getByUser(params);
-    console.log("BBBBBBBBBBBBBBBBBBBBBBBB", res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -19,11 +20,12 @@ export const getCart = createAsyncThunk("getCart", async (params, thunkAPI) => {
 export const getCartDetail = createAsyncThunk(
   "getCartDetail",
   async (params, thunkAPI) => {
+    const token = await AsyncStorage.getItem("token");
     try {
       const res = await cartApi.getCartDetail(params);
       return res;
     } catch (error) {
-      console.log(error);
+      console.log("Looix", error);
     }
   }
 );
@@ -32,9 +34,7 @@ export const addCartDetail = createAsyncThunk(
   "addCartDetail",
   async (params, thunkAPI) => {
     try {
-      console.log(params);
       const res = await cartApi.addCartDetail(params);
-      console.log(res);
       return res;
     } catch (error) {
       console.log(error);
@@ -59,7 +59,6 @@ export const updateCartDetail = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const res = await cartApi.updateCartDetail(params);
-      console.log(res);
       return res;
     } catch (error) {
       console.log(error);
@@ -108,7 +107,6 @@ const cartSlice = createSlice({
     [getCart.pending]: (state, action) => {},
     [getCart.fulfilled]: (state, action) => {
       state.cart = action.payload;
-      console.log("BBBBBBBBBBBBBBB", state.cart);
     },
     [getCart.rejected]: (state, action) => {},
 
@@ -131,7 +129,6 @@ const cartSlice = createSlice({
       if (p) {
         p.cartDetail.amount = action.payload.cartDetail.amount;
       } else {
-        console.log(action.payload);
         state.cartDetails.push(action.payload);
       }
     },

@@ -109,8 +109,7 @@ export const findByCategoryAsc = createAsyncThunk(
   "findByCategoryAsc",
   async (params, { rejectWithValue }) => {
     try {
-      const res = await productApi.findByCategoryAndNameAsc(params);
-
+      const res = await productApi.findByCategoryAsc(params);
       return res;
     } catch (error) {
       console.log(error);
@@ -122,7 +121,7 @@ export const findByCategoryDesc = createAsyncThunk(
   "findByCategoryDesc",
   async (params, { rejectWithValue }) => {
     try {
-      const res = await productApi.findByCategoryAndNameDesc(params);
+      const res = await productApi.findByCategoryDesc(params);
 
       return res;
     } catch (error) {

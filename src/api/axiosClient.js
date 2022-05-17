@@ -14,6 +14,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
   const token = await AsyncStorage.getItem("token");
+  console.log("TKKK", token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -30,6 +31,7 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     AsyncStorage.removeItem("token");
+    console.log("co loi gi dp");
     throw error;
   }
 );

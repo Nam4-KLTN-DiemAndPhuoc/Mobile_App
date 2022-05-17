@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import AdvertisementItem from "../components/advertisement/AdvertisementItem";
+import Apploader from "../components/Apploader";
 import HomeHeader from "../components/header/HomeHeader";
 import ItemProduct from "../components/product/ItemProduct";
 import { getAll } from "../redux/productListSlice";
@@ -14,7 +15,7 @@ export default function Dashboard({ navigation }) {
 
   const { products } = useSelector((state) => state.productList);
   const { advertisements } = useSelector((state) => state.advertisement);
-
+  const [loader, setLoader] = useState(false);
   const data = [
     { type: 1, key: 1 },
     { type: 2, key: 2 },
@@ -52,6 +53,10 @@ export default function Dashboard({ navigation }) {
       limit: 10,
     };
     dispatch(getAll(data));
+
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   };
 
   const isCloseToBottom = ({
@@ -77,6 +82,7 @@ export default function Dashboard({ navigation }) {
             renderItem={({ item }) => render(item)}
             onScroll={({ nativeEvent }) => {
               if (isCloseToBottom(nativeEvent)) {
+                setLoader(true);
                 handleLoad();
               }
             }}
@@ -84,6 +90,7 @@ export default function Dashboard({ navigation }) {
           />
         </View>
       </View>
+      {loader ? <Apploader /> : null}
     </>
   );
 }

@@ -1,6 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authApi from "../api/authApi";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   user: null,
@@ -61,10 +61,8 @@ export const logout = createAsyncThunk("logout", async (params, thunkAPI) => {
 export const updateUser = createAsyncThunk(
   "updateUser",
   async (params, { rejectWithValue }) => {
-    console.log(params);
     try {
       const res = await authApi.updateUser(params);
-      console.log("AAAAAAAAAAAA", res);
       return res;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -107,10 +105,8 @@ const authSlice = createSlice({
     // refreshToken
     [refreshToken.pending]: (state, action) => {},
     [refreshToken.fulfilled]: (state, action) => {
-      if (state.token) {
-        state.token = action.payload.token;
-        state.user = action.payload.user;
-      }
+      state.token = action.payload.token;
+      state.user = action.payload.user;
     },
     [refreshToken.rejected]: (state, action) => {
       console.log("Token hết hạn vui lòng đăng nhập lại");

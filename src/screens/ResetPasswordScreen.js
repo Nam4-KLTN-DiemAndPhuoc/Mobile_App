@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import Background from "../components/Background";
-import BackButton from "../components/BackButton";
-import Header from "../components/Header";
-import TextInput from "../components/TextInput";
-import Button from "../components/Button";
-import { emailValidator } from "../helpers/emailValidator";
 import { View } from "react-native";
-import authApi from "../api/authApi";
 import Toast from "react-native-root-toast";
+import authApi from "../api/authApi";
+import Apploader2 from "../components/Apploader2";
+import BackButton from "../components/BackButton";
+import Background from "../components/Background";
+import Button from "../components/Button";
+import Header from "../components/Header";
 import Logo from "../components/Logo";
-import Apploader from "../components/Apploader";
+import TextInput from "../components/TextInput";
+import { emailValidator } from "../helpers/emailValidator";
 
 export default function ResetPasswordScreen({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
@@ -90,7 +90,7 @@ export default function ResetPasswordScreen({ navigation }) {
       >
         Tìm tài khoản
       </Button>
-      {loader ? <Apploader /> : null}
+      {loader ? <Apploader2 /> : null}
     </Background>
   );
 }

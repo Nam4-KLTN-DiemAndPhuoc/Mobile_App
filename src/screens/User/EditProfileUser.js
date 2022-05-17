@@ -1,7 +1,7 @@
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/core";
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Toast from "react-native-root-toast";
@@ -10,15 +10,17 @@ import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import { phoneValidator } from "../../helpers/emailValidator";
 import { nameValidator } from "../../helpers/nameValidator";
-import { updateUser } from "../../redux/authSlice";
 import useLocationForm from "../../hook/useLocationForm";
 import { addAddress, updateAddress } from "../../redux/addressSlice";
+import { updateUser } from "../../redux/authSlice";
 
 export default function EditProfileUser() {
   const { user, token } = useSelector((state) => state.auth);
   const { address, messageError } = useSelector((state) => state.address);
   const [addressUser, setAddressUser] = useState(
-    `${address?.street}, ${address?.wards}, ${address?.district}, ${address?.city}`
+    address?.street && address?.wards && address?.district && address?.city
+      ? `${address?.street}, ${address?.wards}, ${address?.district}, ${address?.city}`
+      : ""
   );
 
   const dispatch = useDispatch();
@@ -227,7 +229,6 @@ export default function EditProfileUser() {
                   selectedValue={selectedCity?.value}
                   onValueChange={(itemValue, itemIndex, itemLable) => {
                     onCitySelect(cityOptions[itemIndex - 1]);
-                    console.log(selectedCity);
                   }}
                 >
                   <Picker.Item

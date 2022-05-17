@@ -1,3 +1,4 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
@@ -6,7 +7,6 @@ import { useSelector } from "react-redux";
 import ItemProductOrder from "../../components/order/ItemProductOrder";
 import GeneratorCodeOrder from "../../util/GeneratorCodeOrder";
 import getDate from "../../util/GetDate";
-import { MaterialIcons } from "@expo/vector-icons";
 
 export default function InforOrderScreen() {
   const { user, token } = useSelector((state) => state.auth);
@@ -48,7 +48,6 @@ export default function InforOrderScreen() {
       codeOrder: code,
       paymentMethod: "offline",
     };
-    console.log(data);
     navigation.navigate("PaymentScreen", { data });
   };
 

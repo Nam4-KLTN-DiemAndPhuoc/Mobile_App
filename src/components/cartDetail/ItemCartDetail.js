@@ -1,24 +1,31 @@
+import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 import { useDispatch, useSelector } from "react-redux";
+import attributeApi from "../../api/attributeApi";
 import {
   deleteCartDetail,
   deleteCartDetailDefault,
   updateCartDetail,
   updateCartDetailDefault,
 } from "../../redux/cartSlice";
-import Toast from "react-native-root-toast";
-import attributeApi from "../../api/attributeApi";
 
 export default function ItemCartDetail({ item }) {
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
   const [amount, setAmount] = useState(item?.cartDetail?.amount);
   const [attribute, setAttribute] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(async () => {
     if (item?.cartDetail?.attributeId != null) {
@@ -128,6 +135,11 @@ export default function ItemCartDetail({ item }) {
       },
       textStyle: { color: "#000", fontWeight: "bold" },
     });
+    setModalVisible(!modalVisible);
+  };
+
+  const openModal = () => {
+    setModalVisible(!modalVisible);
   };
   return (
     <View style={styles.container}>
@@ -138,7 +150,7 @@ export default function ItemCartDetail({ item }) {
           padding: 5,
           borderRadius: 5,
         }}
-        onPress={() => handleDelete()}
+        onPress={() => openModal()}
       >
         <FontAwesome5 name="trash-alt" size={24} color="black" />
       </TouchableOpacity>
@@ -158,7 +170,9 @@ export default function ItemCartDetail({ item }) {
             }}
           />
           <View style={styles.information}>
-            <Text>{item?.product?.name}</Text>
+            <View>
+              <Text> {item.product.name} </Text>
+            </View>
             <View style={{ flexDirection: "row" }}>
               <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
                 Size: {attribute?.size}
@@ -209,7 +223,9 @@ export default function ItemCartDetail({ item }) {
             }}
           />
           <View style={[styles.information, {}]}>
-            <Text style={{ color: "#B1B1B1" }}>{item?.product?.name}</Text>
+            <View>
+              <Text>{item.product.name}</Text>
+            </View>
             <View style={{ flexDirection: "row" }}>
               <Text style={{ fontSize: 14, color: "#B1B1B1", marginTop: 10 }}>
                 Size: {attribute?.size}
@@ -238,6 +254,45 @@ export default function ItemCartDetail({ item }) {
           </View>
         </View>
       )}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ marginBottom: 20 }}>
+              <Text style={{ fontSize: 15 }}>
+                Xóa sản phẩm ra khỏi giỏ hàng ?
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => handleDelete()}
+              >
+                <Text style={styles.textStyle}>Xóa</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.addToCart]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hủy bỏ</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -247,7 +302,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
-    backgroundColor: "#F8F8FB",
+    backgroundColor: "rgba(0,0,0,0.1)",
     borderRadius: 10,
     marginLeft: 5,
     marginRight: 5,
@@ -280,5 +335,49 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: "#F08F5F",
     borderRadius: 25,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: 300,
+    // height: 300,
+  },
+  button: {
+    borderRadius: 20,
+    // padding: 10,
+    elevation: 2,
+    width: 70,
+    height: 30,
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+
+    justifyContent: "center",
+  },
+  addToCart: {
+    backgroundColor: "#F08F5F",
+    justifyContent: "center",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

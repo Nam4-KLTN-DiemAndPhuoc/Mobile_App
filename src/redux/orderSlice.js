@@ -11,7 +11,6 @@ export const findOrdersByUserId = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const res = await orderApi.getOrdersByUser(params);
-      console.log("BBBBBBBBBBBBBBBBBBBBBB");
       return res;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -46,12 +45,16 @@ export const addOrderDetail = createAsyncThunk(
 const orderSlice = createSlice({
   name: "orders",
   initialState,
+  reducers: {
+    clearOrders: (state, action) => {
+      state.orders = null;
+    },
+  },
 
   extraReducers: {
     // findOrdersByUserId
     [findOrdersByUserId.pending]: (state, action) => {},
     [findOrdersByUserId.fulfilled]: (state, action) => {
-      console.log("action.payload", action.payload);
       const arr = action.payload;
       state.orders = arr.reverse();
     },
@@ -71,5 +74,7 @@ const orderSlice = createSlice({
     },
   },
 });
+
+export const { clearOrders } = orderSlice.actions;
 
 export default orderSlice.reducer;

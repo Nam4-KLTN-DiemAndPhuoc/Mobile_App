@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
-import Background from "../components/Background";
-import Header from "../components/Header";
-import Button from "../components/Button";
-import TextInput from "../components/TextInput";
+import RadioGroup from "react-native-radio-buttons-group";
+import Toast from "react-native-root-toast";
+import { useDispatch } from "react-redux";
+import authApi from "../api/authApi";
+import Apploader2 from "../components/Apploader2";
 import BackButton from "../components/BackButton";
+import Background from "../components/Background";
+import Button from "../components/Button";
+import Header from "../components/Header";
+import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
 import { emailValidator, phoneValidator } from "../helpers/emailValidator";
+import { nameValidator } from "../helpers/nameValidator";
 import {
   passwordValidator,
   password_CrfValidator,
 } from "../helpers/passwordValidator";
-import { nameValidator } from "../helpers/nameValidator";
-import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
-import { useDispatch } from "react-redux";
-import Toast from "react-native-root-toast";
-import authApi from "../api/authApi";
-import Apploader from "../components/Apploader";
 
 const radioButtonsData = [
   {
@@ -202,7 +202,7 @@ export default function RegisterScreen({ navigation }) {
           <Text style={styles.link}>Đăng nhập</Text>
         </TouchableOpacity>
       </View>
-      {register ? <Apploader /> : null}
+      {register ? <Apploader2 /> : null}
     </Background>
   );
 }

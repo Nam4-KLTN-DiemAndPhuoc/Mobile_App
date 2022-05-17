@@ -9,10 +9,13 @@ import { Picker } from "@react-native-picker/picker";
 import { MaterialIcons } from "@expo/vector-icons";
 import { addCartDetail, addCartDetailDefault } from "../../redux/cartSlice";
 import Toast from "react-native-root-toast";
+import { useNavigation } from "@react-navigation/core";
+import { findCommentByProductId } from "../../redux/commentSlice";
+import Apploader from "../../components/Apploader";
 
 export default function ProductDetail() {
   const { product } = useSelector((state) => state.product);
-  const { comments } = useSelector((state) => state.comment);
+
   const { categoryFind } = useSelector((state) => state.category);
   const { supplier } = useSelector((state) => state.suppliers);
   const { attributes } = useSelector((state) => state.attribute);
@@ -20,8 +23,10 @@ export default function ProductDetail() {
   const { cart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
   const [amount, setAmount] = useState(1);
+  const [loader, setLoader] = useState(false);
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const handlerMinus = () => {
     if (amount >= 2) {
@@ -73,6 +78,16 @@ export default function ProductDetail() {
       },
       textStyle: { color: "#000", fontWeight: "bold" },
     });
+  };
+
+  const commentSceen = () => {
+    setLoader(true);
+    dispatch(findCommentByProductId(product.id));
+
+    setTimeout(() => {
+      setLoader(false);
+      navigation.navigate("CommentScreen");
+    }, 1000);
   };
 
   return (
@@ -143,16 +158,22 @@ export default function ProductDetail() {
         </View>
         <View style={styles.action}>
           <TouchableOpacity
-            style={styles.addToCart}
+            style={styles.buyNow}
             onPress={() => addCartDetaill()}
           >
             <MaterialIcons name="add-shopping-cart" size={30} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buyNow}>
-            <Text> Mua ngay</Text>
+          <TouchableOpacity
+            style={styles.toComment}
+            onPress={() => commentSceen()}
+          >
+            <Text> Đánh giá sản phẩm </Text>
+            <MaterialIcons name="navigate-next" size={30} color="black" />
           </TouchableOpacity>
         </View>
       </View>
+
+      {loader ? <Apploader /> : null}
     </ScrollView>
   );
 }
@@ -219,6 +240,15 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     margin: 20,
+  },
+  toComment: {
+    backgroundColor: "#C4C4C4",
+    padding: 15,
+    // width: 100,
+    borderRadius: 30,
+    alignItems: "center",
+    margin: 20,
+    flexDirection: "row",
   },
   buyNow: {
     backgroundColor: "#F08F5F",

@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
+import Apploader from "../Apploader";
 import ItemProduct from "../product/ItemProduct";
 
 export default function ListProductSearch({ page, setPage }) {
   const { productSearch } = useSelector((state) => state.productSearch);
 
   const [pageSreach, setPageSreach] = useState(page);
+  const [loader, setLoader] = useState(false);
 
   const handleLoad = () => {
     setPage(pageSreach + 1);
     setPageSreach(pageSreach + 1);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1500);
   };
 
   const isCloseToBottom = ({
@@ -36,10 +41,12 @@ export default function ListProductSearch({ page, setPage }) {
         key={(item, index) => (key = item.product.id + index)}
         onScroll={({ nativeEvent }) => {
           if (isCloseToBottom(nativeEvent)) {
+            setLoader(true);
             handleLoad();
           }
         }}
       />
+      {loader ? <Apploader /> : null}
     </View>
   );
 }
