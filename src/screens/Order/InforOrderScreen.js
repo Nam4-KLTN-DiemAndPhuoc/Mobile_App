@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
+import attributeApi from "../../api/attributeApi";
 import ItemProductOrder from "../../components/order/ItemProductOrder";
 import GeneratorCodeOrder from "../../util/GeneratorCodeOrder";
 import getDate from "../../util/GetDate";
@@ -18,16 +19,21 @@ export default function InforOrderScreen() {
 
   useEffect(() => {
     var price = 0;
-    cartDetails?.map((cartDetail) => {
-      if (!cartDetail.product.deletedAt) {
+    cartDetails?.map(async (cartDetail) => {
+      const res = await attributeApi.findById(
+        cartDetail?.cartDetail?.attributeId
+      );
+
+      if (!cartDetail.product.deletedAt && res?.amount > 0) {
         price =
           price +
           cartDetail?.cartDetail.amount *
             (cartDetail?.product.price -
               cartDetail?.product.discount * cartDetail?.product.price);
+
+        setTotalPrice(price);
       }
     });
-    setTotalPrice(price);
   }, [cartDetails]);
 
   useEffect(() => {

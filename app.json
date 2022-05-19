@@ -2,9 +2,12 @@
   "expo": {
     "plugins": [
       [
-        "expo-image-picker",
+        "expo-notifications",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "icon": "./assets/SHOPDP2.png",
+          "color": "#ffffff",
+          "sounds": ["./assets/ringring.mp3", "./assets/ringring.mp3"],
+          "mode": "production"
         }
       ]
     ],

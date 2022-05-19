@@ -1,10 +1,24 @@
 import { useNavigation } from "@react-navigation/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function ItemOrderHistory({ item }) {
   const navigation = useNavigation();
+
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    if (item.status == "CANCELED") {
+      setStatus("ĐÃ HỦY");
+    } else if (item.status == "DELIVERED") {
+      setStatus("ĐÃ GIAO THÀNH CÔNG");
+    } else if (item.status == "ORDER_IN_PROGRESS") {
+      setStatus("ĐANG CHỜ XỬ LÝ");
+    } else {
+      setStatus("ĐƠN HÀNG ĐANG GIAO");
+    }
+  });
 
   const handleClick = () => {
     const data = item;
@@ -21,7 +35,7 @@ export default function ItemOrderHistory({ item }) {
             Trạng thái:{" "}
             <Text style={{ color: "#F08F5F", fontWeight: "bold" }}>
               {" "}
-              {item.status}
+              {status}
             </Text>
           </Text>
         </View>

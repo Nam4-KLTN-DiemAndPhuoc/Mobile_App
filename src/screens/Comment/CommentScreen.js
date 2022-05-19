@@ -72,10 +72,6 @@ export default function CommentScreen() {
       return;
     }
 
-    if (!textComment) {
-      return;
-    }
-
     setLoader(true);
     let imageUrl = "";
     if (imageComment) {

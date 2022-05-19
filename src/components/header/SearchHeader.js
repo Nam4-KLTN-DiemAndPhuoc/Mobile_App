@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -22,6 +23,8 @@ import {
 
 export default function SearchHeader({ pageSearch, categorySelect }) {
   const dispatch = useDispatch();
+
+  const navigation = useNavigation();
   const [text, setText] = useState("");
   const [page, setPage] = useState(1);
   const handleChangeText = (text) => {
@@ -215,7 +218,12 @@ export default function SearchHeader({ pageSearch, categorySelect }) {
             style={styles.textInput}
             placeholder="Tìm kiếm"
           />
-          <TouchableOpacity style={styles.cart}>
+          <TouchableOpacity
+            style={styles.cart}
+            onPress={() => {
+              navigation.navigate("CartScreen");
+            }}
+          >
             <Ionicons
               style={styles.iconCart}
               name="ios-cart-outline"

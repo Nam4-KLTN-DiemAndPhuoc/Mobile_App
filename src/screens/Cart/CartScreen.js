@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
+import attributeApi from "../../api/attributeApi";
 import ItemCartDetail from "../../components/cartDetail/ItemCartDetail";
 import {
   addCartDetail,
@@ -42,17 +43,19 @@ export default function CartScreen() {
 
     var price = 0;
     if (user) {
-      cartDetails?.map((cartDetail) => {
-        if (!cartDetail.product.deletedAt) {
+      cartDetails?.map(async (cartDetail) => {
+        const res = await attributeApi.findById(
+          cartDetail?.cartDetail?.attributeId
+        );
+        if (!cartDetail.product.deletedAt && res?.amount > 0) {
           price =
             price +
             cartDetail?.cartDetail.amount *
               (cartDetail?.product.price -
                 cartDetail?.product.discount * cartDetail?.product.price);
         }
+        setTotalPrice(price);
       });
-
-      setTotalPrice(price);
     }
 
     if (!user) {

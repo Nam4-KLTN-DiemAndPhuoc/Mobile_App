@@ -17,7 +17,7 @@ export default function ItemProductOrder({ item }) {
   }, []);
   return (
     <View style={styles.container}>
-      {!item?.product?.deletedAt ? (
+      {!item?.product?.deletedAt && attribute.amount > 0 ? (
         <View style={styles.product}>
           <Image
             source={{

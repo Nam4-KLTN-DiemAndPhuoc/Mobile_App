@@ -1,6 +1,7 @@
 import axios from "axios";
 import queryString from "query-string";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-root-toast";
 
 const REACT_APP_API_URL = "http://165.22.105.148:9191/api/";
 
@@ -31,7 +32,19 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     AsyncStorage.removeItem("token");
-    console.log("co loi gi dp");
+    Toast.show("Đã có lỗi xảy ra !!", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      containerStyle: {
+        backgroundColor: "#C4C4C4",
+        borderRadius: 200,
+        marginBottom: 300,
+        paddingHorizontal: 20,
+        shadowColor: "#e6e6e6",
+        shadowOpacity: 0.5,
+      },
+      textStyle: { color: "#000", fontWeight: "bold" },
+    });
     throw error;
   }
 );

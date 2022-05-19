@@ -9,6 +9,7 @@ import { deleteCartDetail } from "../../redux/cartSlice";
 import { addOrder, addOrderDetail } from "../../redux/orderSlice";
 import TextInput from "../../components/TextInput";
 import voucherApi from "../../api/voucherApi";
+import * as Notifications from "expo-notifications";
 
 export default function PaymentScreen({ route }) {
   const { user } = useSelector((state) => state.auth);
@@ -34,7 +35,14 @@ export default function PaymentScreen({ route }) {
         dispatch(deleteCartDetail(cartDetail.cartDetail.id));
       }
     });
-    navigation.navigate("OrderHistoryScreen");
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "SHOPDP",
+        body: `Đơn hàng ${res.payload.codeOrder} của bạn đã được chúng thôi ghi nhận, chúng tôi sẽ sớm xác nhận và gửi mail cho bạn`,
+      },
+      trigger: { seconds: 1 },
+    });
+
     Toast.show("Đặt hàng thành công", {
       duration: Toast.durations.LONG,
       position: Toast.positions.BOTTOM,
@@ -48,6 +56,7 @@ export default function PaymentScreen({ route }) {
       },
       textStyle: { color: "#000", fontWeight: "bold" },
     });
+    navigation.navigate("OrderHistoryScreen");
   };
 
   const searchCode = async () => {

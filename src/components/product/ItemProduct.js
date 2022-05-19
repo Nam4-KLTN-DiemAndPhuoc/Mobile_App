@@ -50,48 +50,64 @@ export default function ItemProduct({ item }) {
   };
 
   const handleAddCartDetail = () => {
-    if (user) {
-      const data = {
-        amount: amount,
-        cart: cart,
-        productId: item.product.id,
-        attributeId:
-          attributeSelected?.value?.id == undefined
-            ? null
-            : attributeSelected?.value?.id,
-      };
-      dispatch(addCartDetail(data));
-    } else {
-      const data = {
-        cartDetail: {
+    if (attributeSelected.value.amount > 0) {
+      if (user) {
+        const data = {
           amount: amount,
-          cart: null,
+          cart: cart,
+          productId: item.product.id,
           attributeId:
             attributeSelected?.value?.id == undefined
               ? null
               : attributeSelected?.value?.id,
+        };
+        dispatch(addCartDetail(data));
+      } else {
+        const data = {
+          cartDetail: {
+            amount: amount,
+            cart: null,
+            attributeId:
+              attributeSelected?.value?.id == undefined
+                ? null
+                : attributeSelected?.value?.id,
+          },
+
+          product: item.product,
+        };
+
+        dispatch(addCartDetailDefault(data));
+      }
+
+      Toast.show("Đã thêm sản phẩm vào giỏ hàng", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        containerStyle: {
+          backgroundColor: "#C4C4C4",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
         },
-
-        product: item.product,
-      };
-
-      dispatch(addCartDetailDefault(data));
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
+      setModalVisible(!modalVisible);
+    } else {
+      Toast.show("Không đủ số lượng sản phẩm", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.CENTER,
+        containerStyle: {
+          backgroundColor: "#C5C5C5",
+          borderRadius: 200,
+          marginBottom: 300,
+          paddingHorizontal: 20,
+          shadowColor: "#e6e6e6",
+          shadowOpacity: 0.5,
+        },
+        textStyle: { color: "#000", fontWeight: "bold" },
+      });
     }
-
-    Toast.show("Đã thêm sản phẩm vào giỏ hàng", {
-      duration: Toast.durations.LONG,
-      position: Toast.positions.BOTTOM,
-      containerStyle: {
-        backgroundColor: "#C4C4C4",
-        borderRadius: 200,
-        marginBottom: 300,
-        paddingHorizontal: 20,
-        shadowColor: "#e6e6e6",
-        shadowOpacity: 0.5,
-      },
-      textStyle: { color: "#000", fontWeight: "bold" },
-    });
-    setModalVisible(!modalVisible);
   };
 
   const handlerMinus = () => {
